@@ -1,0 +1,64 @@
+.UserTable_TopSection {
+    margin:5px;
+    padding: 5px;
+}
+/* Table css */
+.rdt_TableHeadRow
+{
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    font-weight: 500;
+}
+.input-group-text
+{
+    border: none !important;
+}
+.searchandBtSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.mb-3.form_section {
+    margin: 10px;
+    padding: 10px;
+}
+label.form-label {
+    color: black;
+    font-size: 14px;
+    font-weight: 500;
+}
+.userHeaderSec {
+    /* margin: 20px 0px; */
+    padding: 20px;
+    background: white;
+}
+.Usercontainer.mt-2
+ {
+    background: #f6f7fc;
+}
+.tabsec {
+    padding: 20px;
+    background: white;
+    margin: 30px;
+}
+.d-flex.p-3.rounded.mb-3.profilesec {
+    margin: 10px;
+}
+.me-3.imageSec {
+    padding: 10px;
+}
+/*add user page css*/
+.add_user_Body.modal-body {
+    padding: 20px 40px;
+    /* margin: 10px; */
+}
+.modal_footer.modal-footer {
+    justify-content: center;
+}
+button.footer_save_btn.btn.btn-primary,button.footer_cancel_btn.btn.btn-secondary  {
+    width: 100px;
+}
+/*View user page css*/
+.tab_div_Container {
+    margin: 10px 0px;
+}
