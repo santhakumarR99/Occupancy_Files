@@ -1,0 +1,140 @@
+/* Sidebar layout wrapper */
+.app {
+  display: flex;
+  height: 100vh;
+  font-family: sans-serif;
+  background: #ffffff;
+  overflow: hidden;
+}
+
+/* Sidebar Icons Bar (Left narrow strip) */
+.sidebar-icons {
+  width: 60px;
+  background-color: #111827;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem 0;
+  justify-content: space-between;
+}
+
+/* Icon buttons */
+.icon-btn,
+.icon-btn-active {
+  font-size: 1.5rem;
+  margin: 1.25rem 0;
+  cursor: pointer;
+  border-radius: 18px;
+  background: transparent;
+  border: none;
+  transition: all 0.2s ease;
+  color: white;
+}
+
+.icon-btn:hover {
+  color: #4f46e5;
+}
+
+.icon-btn:active {
+  color: white;
+  border-radius: 15px;
+}
+
+.icon-btn-active {
+  color: #2162CD;
+  border: 3px solid #2162CD;
+}
+
+/* Logout button specifically */
+.logout {
+  margin-top: auto;
+  margin-bottom: 1rem;
+  color: red;
+}
+
+/* Sidebar Panel (Right block next to icons) */
+.sidebar-panel {
+  width: 228px;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  overflow: hidden;
+}
+
+/* Title and subtitle */
+.panel-title {
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.panel-subtitle {
+  font-size: 1rem;
+  color: #404252;
+  margin: 0.3rem 0 0.3rem 10px;
+  font-weight: 600;
+}
+
+/* Menu Items (links) */
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.menu-item:hover {
+  background-color: #f3f4f6;
+  color: #000;
+}
+
+.menu-item.active {
+  font-weight: bold;
+  background-color: #e6f0ff;
+  color: #004085;
+}
+
+/* Menu icon inside NavLink */
+.menu-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+/* Menu buttons container */
+.menuIconsdiv {
+  display: flex;
+  flex-direction: column;
+}
+
+/* User info at bottom */
+.user-info {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  color: #1f2937;
+  padding-top: 1rem;
+}
+
+/* Remove focus outline on buttons */
+button:focus {
+  outline: none;
+}
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+}
+/* Submenu padding and underline */
+a.menu-item {
+    padding: 12px;
+    text-decoration: none;
+}
