@@ -7,7 +7,10 @@ const MultiSelectDropdown = ({
   onChange,
   labelKey = "label",
   valueKey = "value",
-  placeholder = "Select Options"
+  placeholder = "Select Options",
+  isInvalid = false,         
+  error = ""             
+
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -41,8 +44,8 @@ const MultiSelectDropdown = ({
   }, []);
 
   const isAllSelected = value.length === options.length;
-  return (
-    <div className="custom-dropdown" ref={dropdownRef}>
+    return (
+    <div className={`custom-dropdown ${isInvalid ? "invalid" : ""}`} ref={dropdownRef}>
       <div
         className="dropdown-header"
         onClick={() => setIsOpen((prev) => !prev)}
@@ -75,8 +78,55 @@ const MultiSelectDropdown = ({
           ))}
         </div>
       )}
+
+      {/* Show validation error */}
+      {isInvalid && error && (
+        <div className="invalid-feedback d-block">{error}</div>
+      )}
     </div>
   );
+  // return (
+  //   <>
+  //   <div className="custom-dropdown" ref={dropdownRef}>
+  //     <div
+  //       className="dropdown-header"
+  //       onClick={() => setIsOpen((prev) => !prev)}
+  //     >
+  //       {value.length > 0 ? `${value.length} Selected` : placeholder}
+  //       <span className={`arrow ${isOpen ? "up" : "down"}`} />
+  //     </div>
+
+  //     {isOpen && (
+  //       <div className="dropdown-list">
+  //         <label className="dropdown-item">
+  //           <input
+  //             type="checkbox"
+  //             checked={isAllSelected}
+  //             onChange={() =>
+  //               toggleOption({ [labelKey]: "Select All", [valueKey]: "__all__" })
+  //             }
+  //           />
+  //           Select All
+  //         </label>
+  //         {options.map((option, idx) => (
+  //           <label key={idx} className="dropdown-item">
+  //             <input
+  //               type="checkbox"
+  //               checked={value.some((v) => v[valueKey] === option[valueKey])}
+  //               onChange={() => toggleOption(option)}
+  //             />
+  //             {option[labelKey]}
+  //           </label>
+  //         ))}
+  //       </div>
+  //     )}
+  //   </div>
+  //      {/* Show validation error */}
+  //     {isInvalid && error && (
+  //       <div className="invalid-feedback d-block">{error}</div>
+  //     )}
+  //   </>
+  // );
 };
 
 export default MultiSelectDropdown;

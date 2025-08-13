@@ -1,0 +1,17 @@
+:root {
+  /* Buttons */
+  --btn-primary-bg: #1D4ED8;     /* Save / Primary */
+  --btn-primary-text: #FFFFFF;
+  --btn-primary-border: transparent;
+
+  --btn-outline-text: #2563EB;   /* Cancel outline */
+  --btn-outline-border: #93C5FD;
+  --btn-outline-bg: #FFFFFF;
+  --btn-outline-bg-hover: #F3F8FF;
+
+  --btn-danger-bg: #E35D54;      /* Delete */
+  --btn-danger-bg-hover: #D65249;
+
+  /* Typography */
+  --modal-header-text: #111827;
+}

@@ -1,0 +1,42 @@
+.delete-modal {
+  min-width: 420px;
+  max-width: 520px;
+  text-align: center;
+  border-radius: 16px;
+}
+.delete-icon {
+  margin: 8px 0 12px;
+}
+.delete-icon img {
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+}
+.delete-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 6px 0 20px;
+  color: #374151;
+}
+.delete-btn {
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 24px;
+  cursor: pointer;
+  transition: background 0.15s ease-in-out;
+}
+.delete-btn:hover,
+.delete-btn:focus,
+.delete-btn:active {
+  background: var(--btn-danger-bg); /* keep same color in all states */
+  outline: none;
+}
+.form-actions { justify-content: center; }
+.cancel-btn {
+  background: var(--btn-outline-bg);
+  color: var(--btn-outline-text);
+  border: 1px solid var(--btn-outline-border);
+}
+.cancel-btn:hover { background: var(--btn-outline-bg-hover); }

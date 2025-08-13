@@ -259,13 +259,14 @@ footer {
 }
 
 .search-bar {
-  width: 200px;
+  width: 300px;
   padding: 12px 40px 12px 16px;
   border: 1px solid #e5e9f2;
   border-radius: 8px;
   font-size: 1rem;
   background: #fff;
   transition: border-color 0.2s;
+  height: 40px;
 }
 
 .search-bar:focus {
@@ -338,32 +339,6 @@ footer {
   }
 }
 
-/* .footer-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  justify-content: flex-end;
-  width: 100%;
-}
-
-.footer-logos {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.footer-logos img {
-  height: 28px;
-  margin-left: 0;
-  vertical-align: middle;
-}
-.footer-left {
-  display: flex;
-  align-items: center;
-  gap: 8px; 
-  white-space: nowrap; 
-} */
-
 .popup-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -383,4 +358,93 @@ footer {
 .popup button {
   margin-top: 16px;
   padding: 6px 18px;
+}
+
+/* Logs container */
+.Logs_container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Filters container */
+.filters-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+/* Search Bar */
+.searchbar {
+  flex: 1;
+}
+
+/* Date Filter */
+.date-filter {
+  display: flex;
+  gap: 15px;
+}
+
+/* Popup overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.popup {
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.popup button {
+  margin-top: 10px;
+  padding: 8px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Table container */
+.card {
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+/* For footer */
+footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
+}
+
+.search-input-wrapper
+ {
+    margin-top: 35px;
+}
+.filter-group .react-select__control {
+    min-width: 220px;
+    max-width: 500px;
+    width: auto;
+    height: 46px;
 }

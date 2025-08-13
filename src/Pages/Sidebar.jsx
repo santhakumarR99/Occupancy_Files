@@ -17,7 +17,7 @@ const Sidebar = () => {
   const { user, logout } = useAuth();
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
-
+ const username = sessionStorage.getItem("username"); // username
   // console.log(user)
   if (!user) return null;
 
@@ -118,7 +118,7 @@ const Sidebar = () => {
 
         <div className="user-info">
           <FaUser />
-          <span>{user.name}</span>
+          <span>{username}</span>
         </div>
       </div>
     </div>

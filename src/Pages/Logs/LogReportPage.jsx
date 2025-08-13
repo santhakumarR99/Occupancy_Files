@@ -5,8 +5,11 @@ import DateFilter from "../Logs/DateFilter";
 import LogTable from "../Logs/LogTable";
 import CurrentTime from "../Logs/CurrentTime";
 import '../Logs/common.css';
+import MultiSelectDropdown from "../CommonComponents/MultiSelectDropDown";
 // import DeloptName from '../images/Delopt_name.png';
 // import JKLogo from '../images/JK_Logo.png';
+
+const API_URL = import.meta.env.VITE_API_URL; // API main url
 
 function getTodayString() {
   const today = new Date();
@@ -30,32 +33,28 @@ function LogReportPage() {
   const [token, setToken] = useState("");
   const [popup, setPopup] = useState({ show: false, message: "" });
 
+
+  const tokenVal = sessionStorage.getItem("token"); // token
+  const vid = sessionStorage.getItem("vid"); // vendor id
+  const username = sessionStorage.getItem("username"); // username
+
   useEffect(() => {
     const fetchAll = async () => {
       setLoading(true);
       try {
-        const loginRes = await axios.post("http://delbi2dev.deloptanalytics.com:3000/auth/login", {
-          username: "Occupancy",
-          password: "Occupancy@2025"
-        });
-        const token = loginRes.data?.token?.token;
-        if (!token) throw new Error("No token received");
-        setToken(token);
-
-        const usersEventsRes = await axios.post(
-          "http://delbi2dev.deloptanalytics.com:3000/settings/logs/usersEvents",
-          {
-            vid: 4,
-            username: "Occupancy"
-          },
+        const payload = {
+          vid,
+          username: username,
+        };
+        let usersEventsRes = await axios.post(
+          `${API_URL}/settings/logs/usersEvents`,
+          payload,
           {
             headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json"
-            }
+              Authorization: `Bearer ${tokenVal}`,
+            },
           }
         );
-
         const users = (usersEventsRes.data.users || []).flat().map(u => u.UserName);
         const events = (usersEventsRes.data.events || []).flat().map(e => e.Events);
 
@@ -91,25 +90,53 @@ function LogReportPage() {
   const fetchLogs = async (params, overrideToken) => {
     setLoading(true);
     try {
-      const body = {
-        vid: 4,
-        username: params.username,
-        events: params.events,
-        fromDate: params.fromDate,
-        toDate: params.toDate,
-        startTime: "0",
-        endTime: "23"
-      };
-      const res = await axios.post(
-        "http://delbi2dev.deloptanalytics.com:3000/settings/logs/getAuditLogs",
-        body,
+    //  console.log(params.UserName?.map(option => option.UserName).join(", ")||"",);
+     console.log(params);
+     
+      // const payload = {
+      //   vid,
+   
+      //   username : params.username,
+      //   events: params.events,
+      //   fromDate: params.fromDate,
+      //   toDate: params.toDate,
+      //   startTime: "0",
+      //   endTime: "23"
+      // };
+
+      const payload = {
+  vid,
+  username: Array.isArray(params.username)
+    ? params.username.map(u =>
+        typeof u === "object"
+          ? u.UserName || u.value || ""
+          : u
+      ).join(",")
+    : params.username || "",
+  events: Array.isArray(params.events)
+    ? params.events.map(e =>
+        typeof e === "object"
+          ? e.Events || e.value || ""
+          : e
+      ).join(",")
+    : params.events || "",
+  fromDate: params.fromDate,
+  toDate: params.toDate,
+  startTime: "0",
+  endTime: "23"
+};
+
+
+      let res = await axios.post(
+        `${API_URL}/settings/logs/getAuditLogs`,
+        payload,
         {
           headers: {
-            Authorization: `Bearer ${overrideToken || token}`,
-            "Content-Type": "application/json"
-          }
+            Authorization: `Bearer ${tokenVal}`,
+          },
         }
       );
+
       const apiLogs = (res.data.logs || []).flat().map(log => ({
         date: log.CtDateTime ? log.CtDateTime.split("T")[0] : "",
         userName: log.UserName,
@@ -222,6 +249,8 @@ function LogReportPage() {
                 onUserChange={handleUserChange}
                 onEventChange={handleEventChange}
               />
+
+            
               <DateFilter
                 value={pendingDate}
                 onChange={handleDateChange}
@@ -233,7 +262,7 @@ function LogReportPage() {
           </div>
           <LogTable logs={filteredLogs} selectedDate={date} />
         </div>
-        
+
         {popup.show && (
           <div className="popup-overlay">
             <div className="popup">

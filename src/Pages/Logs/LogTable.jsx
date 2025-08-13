@@ -1,132 +1,37 @@
-// import React, { useState } from "react";
-// import PropTypes from "prop-types";
-// // import { exportToCSV } from "../utils/csvExport";
-// import DateFilter from "./DateFilter";
-// import './LogTable.css'
-
-// const PAGE_SIZE = 10; // Number of logs to show per page
-
-// const LogTable = ({
-//   logs,
-//   selectedDate,
-//   dateFilterProps,
-//   userFilterProps,
-//   eventFilterProps,
-// }) => {
-//   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
-//   const [loading, setLoading] = useState(false);
-
-//   const handleLoadMore = () => {
-//     setLoading(true);
-//     setTimeout(() => {
-//       setVisibleCount((prev) => prev + PAGE_SIZE);
-//       setLoading(false);
-//     }, 500); // Simulate loading delay for UX
-//   };
-
-//   const visibleLogs = logs.slice(0, visibleCount);
-
-//   return (
-//     <div className="log-table-wrapper">
-//       {logs.length > 0 && (
-//         <div className="table-header">
-//           <div className="table-controls">
-//             {/* Optional Filters and Actions */}
-//             {userFilterProps && <userFilterProps.component {...userFilterProps} />}
-//             {eventFilterProps && <eventFilterProps.component {...eventFilterProps} />}
-//             {dateFilterProps && <DateFilter {...dateFilterProps} />}
-//             {/* <button
-//               className="export-btn"
-//               onClick={() => exportToCSV(logs, selectedDate)}
-//             >
-//               Export to CSV
-//             </button> */}
-//           </div>
-//         </div>
-//       )}
-
-//       <table className="log-table">
-//         <thead>
-//           <tr>
-//             <th>DATE</th>
-//             <th>USER NAME</th>
-//             <th>DESCRIPTION</th>
-//             <th>EVENT</th>
-//           </tr>
-//         </thead>
-//         <tbody>
-//           {logs.length === 0 ? (
-//             <tr>
-//               <td colSpan="4" style={{ textAlign: "center" }}>No logs found</td>
-//             </tr>
-//           ) : (
-//             visibleLogs.map((log, idx) => (
-//               <tr key={`${log.date}-${log.userName}-${idx}`}>
-//                 <td>{log.date}</td>
-//                 <td>{log.userName}</td>
-//                 <td>{log.description}</td>
-//                 <td>{log.event}</td>
-//               </tr>
-//             ))
-//           )}
-//         </tbody>
-//       </table>
-//       {/* Lazy loading: Show Load More if there are more logs */}
-//       {visibleCount < logs.length && (
-//         <div style={{ textAlign: "center", margin: "1rem 0" }}>
-//           <button
-//             className="load-more-btn"
-//             onClick={handleLoadMore}
-//             disabled={loading}
-//           >
-//             {loading ? (
-//               <>
-//                 Loading
-//                 <span className="spinner" />
-//               </>
-//             ) : (
-//               "Load More"
-//             )}
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// LogTable.propTypes = {
-//   logs: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       date: PropTypes.string.isRequired,
-//       userName: PropTypes.string.isRequired,
-//       description: PropTypes.string.isRequired,
-//       event: PropTypes.string.isRequired,
-//     })
-//   ).isRequired,
-//   selectedDate: PropTypes.string.isRequired,
-//   dateFilterProps: PropTypes.object,
-//   userFilterProps: PropTypes.shape({
-//     component: PropTypes.elementType.isRequired,
-//   }),
-//   eventFilterProps: PropTypes.shape({
-//     component: PropTypes.elementType.isRequired,
-//   }),
-// };
-
-// export default LogTable;
-
 import React from "react";
 import PropTypes from "prop-types";
 import { DataGrid } from "@mui/x-data-grid";
 import DateFilter from "./DateFilter";
 import './LogTable.css';
+import DataTable from "react-data-table-component";
 
-const columns = [
-  { field: "date", headerName: "DATE", flex: 1 },
-  { field: "userName", headerName: "USER NAME", flex: 1 },
-  { field: "description", headerName: "DESCRIPTION", flex: 2 },
-  { field: "event", headerName: "EVENT", flex: 1 },
-];
+
+  const conditionalRowStyles = [
+    // {
+    //   when: (row) => row.id === selectedRowId,
+    //   style: {
+    //     backgroundColor: "#f6f7fc",
+    //   },
+    // },
+  ];
+  const columns = [
+    {
+      name: "DATE",
+      selector: (row) => row.date,
+    },
+    {
+      name: "USER NAME",
+      selector: (row) => row.userName,
+    },
+    {
+      name: "DESCRIPTION",
+      selector: (row) => row.description,
+    },
+    {
+      name: "EVENT",
+      selector: (row) => row.event,
+    },
+  ];
 
 const LogTable = ({
   logs,
@@ -140,6 +45,44 @@ const LogTable = ({
     id: idx,
     ...log,
   }));
+  const customStyles = {
+    headCells: {
+      style: {
+        backgroundColor: "#ffffff",
+        color: "black",
+        fontWeight: "300",
+        fontSize: "14px",
+        textTransform: "uppercase",
+        borderBottom: "2px solid #ddd",
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    cells: {
+      style: {
+        fontSize: "16px",
+        fontWeight: "400",
+        padding: "10px 15px",
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "48px", // row height
+        "&:hover": {
+          backgroundColor: "#f0f9ff", // hover background
+          cursor: "pointer",
+          fontFamily: "Inter, sans-serif",
+        },
+      },
+    },
+    pagination: {
+      style: {
+        borderTop: "1px solid #ddd",
+        padding: "10px",
+        fontFamily: "Inter, sans-serif",
+      },
+    },
+  };
 
   return (
     <div className="log-table-wrapper">
@@ -153,12 +96,28 @@ const LogTable = ({
         </div>
       )}
 
-      <div style={{ height: 500, width: "100%" }}>
-        <DataGrid
+      <div style={{ width: "100%" }}>
+      {/* <div> */}
+        {/* <DataGrid
           rows={rows}
           columns={columns}
           pageSize={10}
-          rowsPerPageOptions={[10, 25, 50, 100]}
+          rowsPerPageOptions={[5,10, 25, 50, 100]}
+          disableSelectionOnClick
+          autoHeight
+          sx={{
+            backgroundColor: "white",
+          }}
+          localeText={{
+            noRowsLabel: "No logs found",
+          }} */}
+        {/* <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: { paginationModel: { pageSize: 10, page: 0 } }
+          }}
+          pageSizeOptions={[5, 10, 25, 50, 100]}
           disableSelectionOnClick
           autoHeight
           sx={{
@@ -167,7 +126,31 @@ const LogTable = ({
           localeText={{
             noRowsLabel: "No logs found",
           }}
-        />
+        /> */}
+
+          {/* <div style={{ overflowY: "scroll" }}> */}
+             <div style={{ maxHeight: "550px", overflowY: "scroll" }}>
+                    {/* const FixedHeaderStory = ({ fixedHeader, fixedHeaderScrollHeight }) => ( */}
+                    <DataTable
+                      columns={columns}
+                      data={rows}
+                      // onRowClicked={(row) => setSelectedRowId(row.SL)}
+                      highlightOnHover
+                      pointerOnHover
+                      selectableRowsHighlight
+                      conditionalRowStyles={conditionalRowStyles}
+                      pagination
+                      paginationPerPage={5}
+                      paginationRowsPerPageOptions={[5, 10, 15]}
+                      responsive
+                      customStyles ={customStyles}
+                      // fixedHeader={FixedHeader}
+                      // fixedHeaderScrollHeight={
+                      //   FixedHeader.fixedHeaderScrollHeight
+                      // }
+                    />
+                  </div>
+
       </div>
     </div>
   );

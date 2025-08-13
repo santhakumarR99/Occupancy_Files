@@ -17,6 +17,9 @@ import "./Components/Styles/Mainpage.css";
 import ProtectedLayout from "./Context/ProtectedLayout";
 import DashboardPage from "./Pages/Dashboard/Dashboard1";
 import LogReportPage from "./Pages/Logs/LogReportPage";
+import SMSTab from "./Pages/SMS/SMSTab";
+import EmailTab from "./Pages/Email/EmailTab";
+import ThresholdsPage from "./Pages/Threshold/pages/ThresholdsPage";
 function App() {
   return (
     <div className="Mainapp">
@@ -95,7 +98,8 @@ function App() {
                       <ProtectedRoute
                         allowedRoles={["admin", "user", "Operator"]}
                       >
-                        <UnderDevelopment />
+                        <ThresholdsPage />
+                        {/* /<UnderDevelopment /> */}
                       </ProtectedRoute>
                     }
                   />
@@ -103,16 +107,18 @@ function App() {
                   <Route
                     path="/sms"
                     element={
-                      <ProtectedRoute allowedRoles={["admin", "user"]}>
-                        <UnderDevelopment />
+                      <ProtectedRoute allowedRoles={["admin", "user", "Operator"]}>
+                        {/* <UnderDevelopment /> */}
+                     <SMSTab/>
                       </ProtectedRoute>
                     }
                   />
                   <Route
                     path="/email"
                     element={
-                      <ProtectedRoute allowedRoles={["admin"]}>
-                        <UnderDevelopment />
+                      <ProtectedRoute allowedRoles={["admin", "user", "Operator"]}>
+                        {/* <UnderDevelopment /> */}
+                        <EmailTab />
                       </ProtectedRoute>
                     }
                   />
@@ -136,3 +142,5 @@ function App() {
 }
 
 export default App;
+
+

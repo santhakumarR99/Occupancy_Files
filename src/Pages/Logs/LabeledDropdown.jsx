@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Select, { components } from "react-select";
+// Align visual design with the existing MultiSelectDropDown component
+import "../../Components/Styles/Multiselectdropdown.css";
 
 const LabeledDropdown = ({ label, value, onChange, options, placeholder }) => {
   // Support both string and object options
@@ -11,28 +13,56 @@ const LabeledDropdown = ({ label, value, onChange, options, placeholder }) => {
   );
   const selectedValues = selectOptions.filter(opt => value.includes(opt.value));
 
-  // Custom Option with checkbox
+  // Custom Option with checkbox styled like dropdown-item
   const Option = (props) => (
     <components.Option {...props}>
-      <input
-        type="checkbox"
-        checked={props.isSelected}
-        onChange={() => {}}
-        style={{ marginRight: 8 }}
-      />
-      <label>{props.label}</label>
+      <label className="dropdown-item" style={{ display: 'flex', alignItems: 'center' }}>
+        <input
+          type="checkbox"
+          checked={props.isSelected}
+          onChange={() => {}}
+          style={{ marginRight: 10 }}
+        />
+        {props.label}
+      </label>
     </components.Option>
   );
+
+  // Hide token chips; show "N Selected" like the custom dropdown
+  const MultiValue = () => null;
+
+  const ValueContainer = (props) => {
+    const count = props.getValue().length;
+    const text = count > 0 ? `${count} Selected` : (props.selectProps.placeholder || "Select");
+    return (
+      <components.ValueContainer {...props}>
+        <div style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{text}</div>
+        {/* keep the input so keyboard interactions still work */}
+        {Array.isArray(props.children) ? props.children[1] : null}
+      </components.ValueContainer>
+    );
+  };
+
+  // Use an arrow indicator matching the design
+  const DropdownIndicator = (props) => {
+    const isOpen = props.selectProps.menuIsOpen;
+    return (
+      <components.DropdownIndicator {...props}>
+        <span className={`arrow ${isOpen ? 'up' : 'down'}`} />
+      </components.DropdownIndicator>
+    );
+  };
+
+  const IndicatorSeparator = () => null;
 
   // Custom MenuList with filter icon and clear selected
   const MenuList = (props) => (
     <>
-      <div style={{ display: 'flex', alignItems: 'center', padding: '8px 12px', borderBottom: '1px solid #eee', background: '#fafbfc' }}>
-        <svg width="18" height="18" fill="none" stroke="#7b809a" strokeWidth="2" viewBox="0 0 24 24" style={{ marginRight: 8 }}><path d="M3 4h18M6 8v8a2 2 0 002 2h8a2 2 0 002-2V8"/><rect x="9" y="12" width="6" height="6" rx="1"/></svg>
-        <span style={{ fontWeight: 600, color: '#7b809a', fontSize: 14 }}>Filter</span>
-      </div>
-      <div style={{ padding: '4px 12px', borderBottom: '1px solid #eee', background: '#fafbfc', cursor: 'pointer', color: '#bfc7d1', fontWeight: 600, fontSize: 14 }}
-        onClick={() => props.selectProps.onChange([])}>
+      <div
+        className="dropdown-item"
+        style={{ fontWeight: 600, color: '#7b809a', borderBottom: '1px solid #eee' }}
+        onClick={() => props.selectProps.onChange([])}
+      >
         Clear Selected Items
       </div>
       <components.MenuList {...props} />
@@ -54,22 +84,50 @@ const LabeledDropdown = ({ label, value, onChange, options, placeholder }) => {
           }
         }}
         placeholder={placeholder}
+        className="custom-dropdown" /* match MultiSelectDropDown width/positioning */
         classNamePrefix="react-select"
         closeMenuOnSelect={false}
         hideSelectedOptions={false}
-        components={{ Option, MenuList }}
+        components={{ Option, MenuList, MultiValue, ValueContainer, DropdownIndicator, IndicatorSeparator }}
         styles={{
-          menu: provided => ({ ...provided, zIndex: 9999 }),
-          container: provided => ({ ...provided, minWidth: 260, maxWidth: 260, width: 260 }),
-          control: provided => ({ ...provided, minWidth: 260, maxWidth: 260, width: 260 }),
-          valueContainer: provided => ({
+          container: (provided) => ({
             ...provided,
-            minWidth: 0,
-            maxWidth: 220,
-            maxHeight: 38,
-            overflowX: 'auto',
-            overflowY: 'auto',
-            flexWrap: 'nowrap',
+            width: 250,
+            fontFamily: 'sans-serif',
+          }),
+          control: (provided, state) => ({
+            ...provided,
+            padding: '6px 8px',
+            borderRadius: 8,
+            background: '#fff',
+            boxShadow: '0px 2px 6px rgba(0,0,0,0.1)',
+            border: state.isFocused ? '1px solid #cbd5e1' : '1px solid transparent',
+            cursor: 'pointer',
+          }),
+          indicatorsContainer: (provided) => ({ ...provided, paddingRight: 8 }),
+          placeholder: (provided) => ({ ...provided, marginLeft: 0 }),
+          valueContainer: (provided) => ({
+            ...provided,
+            paddingLeft: 8,
+          }),
+          menu: (provided) => ({
+            ...provided,
+            zIndex: 9999,
+            borderRadius: 8,
+            boxShadow: '0px 4px 12px rgba(0,0,0,0.1)',
+            marginTop: 6,
+            overflow: 'hidden',
+          }),
+          menuList: (provided) => ({
+            ...provided,
+            paddingTop: 8,
+            paddingBottom: 8,
+          }),
+          option: (provided, state) => ({
+            ...provided,
+            padding: '0',
+            background: state.isFocused ? '#f3f4f6' : '#fff',
+            color: '#111827',
           }),
         }}
       />

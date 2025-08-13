@@ -7,9 +7,9 @@
   /* box-shadow: 0 2px 8px rgba(0,0,0,0.07); */
   /* overflow: hidden; */
   /* max-height: 60vh; */
-  height: auto;
+  /* height: auto;
   overflow-y: auto; /* Enable vertical scroll */
-  position: relative;
+  /* position: relative; */
 }
 
 .table-header {

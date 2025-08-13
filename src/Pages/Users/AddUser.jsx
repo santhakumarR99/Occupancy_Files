@@ -4,28 +4,40 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { Field, Formik, Form as FormikForm } from "formik";
 import * as Yup from "yup";
 import MultiSelectDropdown from "../CommonComponents/MultiSelectDropDown";
-
-const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
+import SingleSelectDropdown from "../CommonComponents/SingleSelectDropdown";
+SingleSelectDropdown;
+const UserFormModal = ({
+  show,
+  handleClose,
+  onSave,
+  editingUser,
+  Zones,
+  userdata,
+}) => {
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null); // For editing
   const RequiredIcon = () => <span style={{ color: "red" }}> *</span>;
-  console.log(Zones);
+  const safeMappedZones = Array.isArray(userdata?.mappedZones)
+    ? userdata.mappedZones
+    : [];
+  console.log(userdata, safeMappedZones);
   const initialValues = {
     username: editingUser?.username || "",
     useremailid: editingUser?.useremailid || "",
     password: editingUser?.password || "",
-    confirmPassword: editingUser?.confirmPassword || "",
+    confirmPassword: editingUser?.password || "",
     usertype: editingUser?.usertype || "Operator",
     selectedZones:
-      editingUser?.selectedZones?.split(":").map((z) => ({
-        label: z.Zonename,
-        value: z.Sl,
+      safeMappedZones.map((z) => ({
+        label: z.zonename,
+        value: z.sl,
       })) || [],
-    useraddress: editingUser?.useraddress || "",
+    useraddress: editingUser?.address || "",
     receiveHealthMail: editingUser?.receiveHealthMail || false,
-    userblock: editingUser?.userblock|| false
+    userblock: editingUser?.userblock || false,
   };
-
+  console.log(editingUser)
+  // console.log('receiveHealthMail:',initialValues);
   const validationSchema = Yup.object().shape({
     username: Yup.string()
       .max(20, "Max 20 characters")
@@ -55,6 +67,7 @@ const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
+          enableReinitialize={true}
           onSubmit={(values, { resetForm }) => {
             onSave(values); // pass to main page
             resetForm();
@@ -154,29 +167,47 @@ const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
                     </Form.Control.Feedback>
                   </Form.Group>
                 </Row>
-
                 <Row>
                   <Form.Group as={Col} className="mb-3">
                     <Form.Label>
                       User Type
                       <RequiredIcon />
                     </Form.Label>
-                    <Form.Select
+                    {/* <Form.Select
                       name="usertype"
                       value={values.usertype}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       isInvalid={touched.usertype && !!errors.usertype}
                     >
-                      {/* <option value="Admin">Admin</option> */}
                       <option value="Operator">Operator</option>
                       <option value="Viewer">Viewer</option>
                     </Form.Select>
                     <Form.Control.Feedback type="invalid">
                       {errors.usertype}
-                    </Form.Control.Feedback>
+                    </Form.Control.Feedback> */}
+                    <SingleSelectDropdown
+                      options={[
+                        { label: "Operator", value: "Operator" },
+                        { label: "Viewer", value: "Viewer" },
+                      ]}
+                      value={
+                        values.usertype
+                          ? { label: values.usertype, value: values.usertype }
+                          : null
+                      }
+                      onChange={(selected) =>
+                        setFieldValue("usertype", selected.value)
+                      }
+                      isInvalid={touched.usertype && !!errors.usertype}
+                    />
+                    {touched.usertype && errors.usertype && (
+                      <div className="invalid-feedback d-block">
+                        {errors.usertype}
+                      </div>
+                    )}
                   </Form.Group>
-
+                  {/* <Form.Group as={Col} className="mb-3"></Form.Group> */}
                   <Form.Group as={Col} className="mb-3">
                     <Form.Label>
                       Zones
@@ -185,16 +216,19 @@ const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
                     <MultiSelectDropdown
                       options={Zones}
                       value={values.selectedZones}
-                      onChange={(selected) => setFieldValue("selectedZones", selected)}
+                      onChange={(selected) =>
+                        setFieldValue("selectedZones", selected)
+                      }
                     />
+                    {touched.selectedZones && errors.selectedZones && (
+                      <div className="invalid-feedback d-block">
+                        {errors.selectedZones}
+                      </div>
+                    )}
                   </Form.Group>
                 </Row>
-
                 <Form.Group className="mb-3">
-                  <Form.Label>
-                    Address
-                    <RequiredIcon />
-                  </Form.Label>
+                  <Form.Label>Address</Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={2}
@@ -208,25 +242,44 @@ const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
                     {errors.useraddress}
                   </Form.Control.Feedback>
                 </Form.Group>
-                <Form.Group as={Col} className="mb-3">
-                  <Form.Check
-                    type="checkbox"
-                    name="receiveHealthMail"
-                    label="Receive Health Mail"
-                    checked={values.receiveHealthMail}
-                    onChange={handleChange}
-                  />
-                  {editingUser && editingUser ?
-                  <Form.Check
-                    type="checkbox"
-                    name="userblock"
-                    label="User Block"
-                    checked={values.userblock}
-                    onChange={handleChange}
-                  />:""}
-                </Form.Group>
+                <Row>
+                  {/* <Form.Group as={Col} className="mb-3">
+                    <Form.Check
+                      type="checkbox"
+                      name="receiveHealthMail"
+                      label="Receive Health Mail"
+                      checked={values.receiveHealthMail}
+                      onChange={handleChange}
+                    />
+                  </Form.Group> */}
+                  <Form.Group as={Col} className="mb-3">
+                    <Form.Check
+                      type="checkbox"
+                      name="receiveHealthMail"
+                      label="Receive Health Mail"
+                      checked={values.receiveHealthMail} // Bind to Formik state
+                      onChange={(e) =>
+                        setFieldValue("receiveHealthMail", e.target.checked)
+                      } // Update Formik state
+                    />
+                  </Form.Group>
+
+                  {editingUser && editingUser ? (
+                    <Form.Group as={Col} className="mb-3">
+                      <Form.Check
+                        type="checkbox"
+                        name="userblock"
+                        label="User Block"
+                        checked={values.userblock}
+                        onChange={handleChange}
+                      />
+                    </Form.Group>
+                  ) : (
+                    ""
+                  )}
+                </Row>
               </Modal.Body>
-              <Modal.Footer>
+              <Modal.Footer className="d-flex justify-content-center">
                 <Button variant="secondary" onClick={handleClose}>
                   Cancel
                 </Button>
@@ -243,4 +296,3 @@ const UserFormModal = ({ show, handleClose, onSave, editingUser, Zones }) => {
 };
 
 export default UserFormModal;
-

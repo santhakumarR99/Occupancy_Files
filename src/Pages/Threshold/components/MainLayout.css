@@ -1,0 +1,33 @@
+.main-layout {
+  padding: 24px;
+}
+.main-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+.chip {
+  background: #eef2ff;
+  color: #3b82f6;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+}
+.actions { display: flex; gap: 12px; margin-left: auto; }
+.main-btn {
+  background: #fff;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+  border-radius: 8px;
+  padding: 8px 24px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.main-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.main-content { margin-top: 8px; }

@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
+import MultiSelectDropdown from "../CommonComponents/MultiSelectDropDown";
 import LabeledDropdown from "./LabeledDropdown";
+import "../../Components/Styles/Multiselectdropdown.css";
 
 const SearchBar = ({
   value,
@@ -31,13 +33,20 @@ const SearchBar = ({
     </div>
     {users.length > 0 && (
       <div>
-        <LabeledDropdown
-          label="Users"
+        {/* <MultiSelectDropdown
           value={selectedUser}
           onChange={onUserChange}
           options={users}
           placeholder="All Users"
-        />
+        /> */}
+
+           <LabeledDropdown
+                  label="Users"
+                  value={selectedUser}
+                  onChange={onUserChange}
+                  options={users}
+                  // placeholder="All Users"
+                />
         {userOptionsHidden && (
           <div style={{ color: 'gray', fontSize: '0.9em' }}>
             Some options are hidden in this dropdown
@@ -47,13 +56,19 @@ const SearchBar = ({
     )}
     {events.length > 0 && (
       <div>
-        <LabeledDropdown
-          label="Event"
+        {/* <MultiSelectDropdown
           value={selectedEvent}
           onChange={onEventChange}
           options={events}
           placeholder="All Events"
-        />
+        /> */}
+        <LabeledDropdown
+                  label="Event"
+                  value={selectedEvent}
+                  onChange={onEventChange}
+                  options={events}
+                  // placeholder="All Events"
+                />
         {eventOptionsHidden && (
           <div style={{ color: 'gray', fontSize: '0.9em' }}>
             Some options are hidden in this dropdown
