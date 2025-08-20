@@ -93,12 +93,12 @@ const UserPage = () => {
       ]);
       // console.log(zoneRes , profiledata);
       const formatted = zoneRes.data?.allZones.map((zone) => ({
-        label: zone.zonename, // or whatever the API returns
+        label: zone.zonename, 
         value: zone.sl,
       }));
       setUserProfile(profiledata.data);
       setZoneOptions(formatted);
-      setUsers(userRes.data?.users); // or response.data.users depending on API structure
+      setUsers(userRes.data?.users); //
       // setLoading(false);
     } catch (err) {
       // setError("Failed to load users");
@@ -136,6 +136,7 @@ const UserPage = () => {
       // console.log(response.data);
       seteditUser(response.data?.user[0]);
       setUserSelectedZones(response.data);
+      // console.log("selecteduserzones",response.data)
       setSelectedUser(response.data);
       // console.log(response.data?.user);
     } catch (error) {

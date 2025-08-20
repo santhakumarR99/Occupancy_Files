@@ -34,7 +34,7 @@ const DeleteUserModal = ({ show, onClose, user, onDelete }) => {
       console.log(error);
     }
   };
-  console.log(user)
+  // console.log(user)
   return (
     <Modal
       show={show}

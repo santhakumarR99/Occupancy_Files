@@ -7,7 +7,7 @@ const tokenVal = sessionStorage.getItem("token"); // token
 const vid = sessionStorage.getItem("vid"); // vendor id
 const username = sessionStorage.getItem("username"); // username
 
-console.log("Token in sessionStorage:", sessionStorage.getItem("token"));
+// console.log("Token in sessionStorage:", sessionStorage.getItem("token"));
 
 const SMSForm = () => {
   const [smsUrl, setSmsUrl] = useState("");

@@ -1,4 +1,4 @@
-.live-chart-wrapper {
+/* .live-chart-wrapper {
   font-family: 'Inter', sans-serif;
 }
 
@@ -52,10 +52,71 @@
   border: none !important;
   box-shadow: none !important;
 }
-/* Remove the border or outline on focus */
+
 .recharts-bar-rect:focus,
 .recharts-bar-rect:active {
   outline: none !important;
   border: none !important;
   box-shadow: none !important;
+} */
+
+fieldset {
+  border: none !important;
+}
+
+.live-chart-wrapper {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+.live-chart-wrapper:focus,
+.live-chart-wrapper *:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+.chart-summary {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.chart-summary .legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.dash_zone_icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.checkbox-legend {
+  display: flex;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 8px;
+}
+.legend-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+}
+.legend-checkbox input {
+  transform: translateY(1px);
+}
+
+.custom-tooltip {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  padding: 8px 10px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+}
+
+.tabsec_dash .nav-tabs .nav-link {
+  font-weight: 600;
 }

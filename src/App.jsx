@@ -15,15 +15,16 @@ import UnderDevelopment from "./Pages/CommonComponents/UnderDevlopment";
 import "./Components/Styles/Mainpage.css";
 // import MainHeader from "./Pages/CommonComponents/MainHeader";
 import ProtectedLayout from "./Context/ProtectedLayout";
-import DashboardPage from "./Pages/Dashboard/Dashboard1";
+import DashboardPage from "./Pages/Dashboard/Dashboard";
 import LogReportPage from "./Pages/Logs/LogReportPage";
 import SMSTab from "./Pages/SMS/SMSTab";
 import EmailTab from "./Pages/Email/EmailTab";
-import HelloworldC from "./Pages/Dashboard/helloworld";
+import { ToasterContainer } from "./Pages/CommonComponents/Toaster";
 // import ThresholdsPage from "./Pages/Threshold/pages/ThresholdsPage";
 function App() {
   return (
     <div className="Mainapp">
+      <ToasterContainer />
       <AuthProvider>
         <Router>
           <div className="Header_app">

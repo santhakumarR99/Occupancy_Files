@@ -8,12 +8,14 @@ import {
   ResponsiveContainer,
   LabelList,
   Legend,
+  CartesianGrid,
 } from "recharts";
 import "../../Components/Styles/LiveChart.css";
 import Icon from "../CommonComponents/icon";
 import lowIcon from "../../Components/Assets/dashboard/LowZone_icon.png";
 import medIcon from "../../Components/Assets/dashboard/MediumZone_icon.png";
 import highIcon from "../../Components/Assets/dashboard/HighZone_icon.png";
+
 const getColorByValue = (value) => {
   if (value <= 500) return "#28a745"; // Green
   if (value <= 800) return "#ffc107"; // Yellow
@@ -65,28 +67,42 @@ const LiveOccupancyChart2 = ({ data }) => {
   return (
     <div className="live-chart-wrapper">
       {/* Top Summary Legend */}
+      {/* Top Summary Legend */}
       <div className="chart-summary">
-        <span className="legend-item">
-          <span className="dash_zone_icon"><Icon  img={lowIcon} Img_width="20px" Img_height= "20px"/></span>
-          {counts.Low} Low Occupied Zones
-        </span>
-        <span className="legend-item">
-          <span className="dash_zone_icon"><Icon  img={medIcon} Img_width="20px" Img_height= "20px"/></span>
-          {counts.Medium} Medium Occupied Zones
-        </span>
-        <span className="legend-item">
-          <span className="dash_zone_icon" ><Icon  img={highIcon} Img_width="20px" Img_height= "20px"/></span>
-          {counts.High} High Occupied Zones
-        </span>
+        {counts.Low > 0 && (
+          <span className="legend-item">
+            <span className="dash_zone_icon">
+              <Icon img={lowIcon} Img_width="20px" Img_height="20px" />
+            </span>
+            {counts.Low} Low Occupied Zones
+          </span>
+        )}
+        {counts.Medium > 0 && (
+          <span className="legend-item">
+            <span className="dash_zone_icon">
+              <Icon img={medIcon} Img_width="20px" Img_height="20px" />
+            </span>
+            {counts.Medium} Medium Occupied Zones
+          </span>
+        )}
+        {counts.High > 0 && (
+          <span className="legend-item">
+            <span className="dash_zone_icon">
+              <Icon img={highIcon} Img_width="20px" Img_height="20px" />
+            </span>
+            {counts.High} High Occupied Zones
+          </span>
+        )}
       </div>
 
       {/* Chart */}
-      <ResponsiveContainer width="100%" height={500} style={{ border: "none", boxShadow: "none" }}>
+      <ResponsiveContainer width="100%" height={500}>
         <BarChart
           className="custom-bar-chart"
           data={filteredData}
           margin={{ top: 30, right: 30, bottom: 50, left: 20 }}
         >
+          <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
           <XAxis dataKey="ZoneName" />
           <YAxis
             label={{
@@ -96,11 +112,28 @@ const LiveOccupancyChart2 = ({ data }) => {
             }}
           />
           <Tooltip
+            cursor={false}
             content={({ active, payload }) => {
-              if (active && payload && payload.length) {
+              // Only show tooltip if we're directly on a bar
+              if (
+                active &&
+                payload &&
+                payload.length &&
+                payload[0].value !== undefined &&
+                payload[0].value !== null
+              ) {
                 const d = payload[0].payload;
                 return (
-                  <div className="custom-tooltip">
+                  <div
+                    style={{
+                      background: "#fff",
+                      border: "1px solid #ccc",
+                      padding: "8px",
+                      borderRadius: "6px",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                      fontSize: "14px",
+                    }}
+                  >
                     <p>
                       <strong>In :</strong> {d.Incount}
                     </p>
@@ -113,10 +146,49 @@ const LiveOccupancyChart2 = ({ data }) => {
                   </div>
                 );
               }
+
+              // 👇 return null if hovering empty chart space
               return null;
             }}
           />
+
           <Legend
+            verticalAlign="bottom"
+            content={() => {
+              // Get unique zone types from the raw data, not filteredData
+              const availableTypes = [
+                ...new Set(categorizedData.map((item) => item.type)),
+              ];
+
+              return (
+                <div className="checkbox-legend">
+                  {availableTypes.map((type) => (
+                    <label key={type} className="legend-checkbox">
+                      <input
+                        type="checkbox"
+                        checked={visibleTypes[type]}
+                        onChange={() => handleLegendClick(type)}
+                      />
+                      <span
+                        style={{
+                          color:
+                            type === "Low"
+                              ? "#25B27A"
+                              : type === "Medium"
+                              ? "#FFB700"
+                              : "#F35F5F",
+                        }}
+                      >
+                        {type} Occupied
+                      </span>
+                    </label>
+                  ))}
+                </div>
+              );
+            }}
+          />
+
+          {/* <Legend
             verticalAlign="bottom"
             content={() => (
               <div className="checkbox-legend">
@@ -143,9 +215,15 @@ const LiveOccupancyChart2 = ({ data }) => {
                 ))}
               </div>
             )}
-          />
-          <Bar dataKey="Occupancy" radius={[8, 8, 0, 0]}  tabIndex="-1">
-            <LabelList dataKey="Occupancy" position="top" />
+          /> */}
+
+          <Bar dataKey="Occupancy" radius={[4, 4, 0, 0]} barSize={70}>
+            <LabelList
+              dataKey="Occupancy"
+              position="top"
+              fill="black"
+              fontSize={14}
+            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>

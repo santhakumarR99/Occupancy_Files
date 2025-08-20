@@ -20,7 +20,7 @@ const UserFormModal = ({
   const safeMappedZones = Array.isArray(userdata?.mappedZones)
     ? userdata.mappedZones
     : [];
-  console.log(userdata, safeMappedZones,"selectedzones");
+  // console.log(userdata, safeMappedZones,"selectedzones");
   const initialValues = {
     username: editingUser?.username || "",
     useremailid: editingUser?.useremailid || "",
@@ -30,13 +30,13 @@ const UserFormModal = ({
     selectedZones:
       safeMappedZones.map((z) => ({
         label: z.zonename,
-        value: z.sl,
+        value: z.SL,
       })) || [],
     useraddress: editingUser?.address || "",
     receiveHealthMail: editingUser?.receiveHealthMail || false,
     userblock: editingUser?.userblock || false,
   };
-  console.log(editingUser)
+  // console.log(editingUser)
   // console.log('receiveHealthMail:',initialValues);
   const validationSchema = Yup.object().shape({
     username: Yup.string()
