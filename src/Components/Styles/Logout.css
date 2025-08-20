@@ -1,0 +1,11 @@
+.logout-icon {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+}
+.custom-modal .modal-dialog {
+  max-width: 300px; /* set width */
+}
+.text-center.modal-body {
+    margin: 40px;
+}

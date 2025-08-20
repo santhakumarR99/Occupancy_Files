@@ -1,0 +1,61 @@
+.live-chart-wrapper {
+  font-family: 'Inter', sans-serif;
+}
+
+.chart-summary {
+  display: flex;
+  justify-content: left;
+  gap: 20px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.custom-tooltip {
+  background: #fff;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.checkbox-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.legend-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+}
+.custom-bar-chart {
+  border: none !important;
+  box-shadow: none !important;
+}
+.live-chart-wrapper {
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Remove the border or outline on focus */
+.recharts-bar-rect:focus,
+.recharts-bar-rect:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}

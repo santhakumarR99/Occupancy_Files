@@ -1,0 +1,17 @@
+
+html {
+    font-size: 14px;
+}
+/* .Header_app
+ {
+    display: flex;
+} */
+.card {
+    background: var(--surface-card);
+    padding: 2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+}
+.Header_app {
+    background: #f6f7fc;
+}
