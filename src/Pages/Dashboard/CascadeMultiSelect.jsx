@@ -226,7 +226,7 @@ function CascadeSelectorModal({
 
           return (
             <>
-              <Modal.Header closeButton>
+              <Modal.Header closeButton backdrop="static">
                 <Modal.Title>Filters</Modal.Title>
               </Modal.Header>
               <Modal.Body>
