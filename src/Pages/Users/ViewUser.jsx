@@ -86,20 +86,20 @@ const customStyles = {
 
   return (
     <Modal show={show} onHide={handleClose} centered size="lg">
-      <Modal.Header closeButton>
+      <Modal.Header closeButton className="pb-1">
         <Modal.Title>View User</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="d-flex align-items-start">
           <div className="d-flex  profilesec">
-            <div className="me-3 imageSec">
+            <div className=" ">
               {viewprofileimg ? (
                 <img
                   src={viewprofileimg}
                   alt="Profile"
                   className="profile_image"
-                  width={120}
-                  height={120}
+                  width={100}
+                  height={100}
                 />
               ) : (
                 <FaUserCircle size={120} color="#ccc" />
@@ -137,7 +137,7 @@ const customStyles = {
           onChange={(e) => setSearch(e.target.value)}
         /> */}
 
-        <div className="tabsec_Viewuser">
+        <div className="tabsec_Viewuser pt-2">
           <SearchBar placeholder="Search Zones..." onSearch={setQuery} />
           <div
             className="tab_div_Container"

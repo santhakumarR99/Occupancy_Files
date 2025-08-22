@@ -95,12 +95,23 @@ const LiveOccupancyChart2 = ({ data }) => {
         margin={{ top: 30, right: 30, bottom: 50, left: 20 }}
       >
         <CartesianGrid stroke="#eee" strokeDasharray="5 5" />
-        <XAxis  label={{
+        <XAxis
+          dataKey="ZoneName"
+          interval={0} // show all labels
+          angle={0} // rotate labels for better fit
+          textAnchor="end" // align rotated labels
+          height={80} // extra height for rotated labels
+         
+          tick={{ fontSize: 12 }}
+          label={{
             value: "ZONES",
-            angle: 0,
-            position: "insidebottom",
-            margin: "50px"
-          }}dataKey="ZoneName" />
+            position: "insideBottom",
+            offset: 50,
+            fontSize: 14,
+            // fill: "#333",
+             offset: 30
+          }}
+        />
         <YAxis
           label={{
             value: "COUNTS",
@@ -197,7 +208,8 @@ const LiveOccupancyChart2 = ({ data }) => {
               <span className="dash_zone_icon">
                 <Icon img={lowIcon} Img_width="20px" Img_height="20px" />
               </span>
-              {counts.Low} Low Occupied Zones
+              {counts.Low} 
+              <p className="OccupiedZoneLabel_color">Low Occupied Zones</p>
             </span>
           )}
           {counts.Medium > 0 && (
@@ -205,7 +217,8 @@ const LiveOccupancyChart2 = ({ data }) => {
               <span className="dash_zone_icon">
                 <Icon img={medIcon} Img_width="20px" Img_height="20px" />
               </span>
-              {counts.Medium} Medium Occupied Zones
+              {counts.Medium}
+                <p className="OccupiedZoneLabel_color">Medium Occupied Zones</p>
             </span>
           )}
           {counts.High > 0 && (
@@ -213,7 +226,9 @@ const LiveOccupancyChart2 = ({ data }) => {
               <span className="dash_zone_icon">
                 <Icon img={highIcon} Img_width="20px" Img_height="20px" />
               </span>
-              {counts.High} High Occupied Zones
+              {counts.High} 
+                <p className="OccupiedZoneLabel_color">High Occupied Zones</p>
+             
             </span>
           )}
         </div>
@@ -225,7 +240,7 @@ const LiveOccupancyChart2 = ({ data }) => {
             aria-label="Enlarge chart"
             title="Enlarge"
           >
-       <Icon img={enlargeIcon} Img_width="20px" Img_height="20px" />
+            <Icon img={enlargeIcon} Img_width="20px" Img_height="20px" />
           </button>
         </div>
       </div>

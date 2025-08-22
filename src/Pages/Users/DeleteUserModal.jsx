@@ -55,20 +55,24 @@ const DeleteUserModal = ({ show, onClose, user, onDelete }) => {
           style={{ width: '800', height: '200px' }}
           className="mb-3"
         />
-        <h5>Do you want to delete <strong>"{user?.username}"</strong> User?</h5>
+        <h5 class="pb-2 pt-3">Do you want to delete <strong>"{user?.username}"</strong> User?</h5>
         <div className='loaderSection'>
           {/* <Loader /> */}
         </div>
+        
+       <Modal.Footer className="justify-content-center border-0 pb-0">
+          <Button variant="primary btn-sm" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button variant="primary btn-sm delete" onClick={handleDelete}>
+            Delete
+          </Button>
+      </Modal.Footer>
+
       </Modal.Body>
 
-      <Modal.Footer className="justify-content-center">
-        <Button variant="outline-primary" onClick={onClose}>
-          Cancel
-        </Button>
-        <Button variant="danger" onClick={handleDelete}>
-          Delete
-        </Button>
-      </Modal.Footer>
+     
+
     </Modal>
   );
 };

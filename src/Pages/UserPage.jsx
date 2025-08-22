@@ -15,7 +15,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { RxFontFamily } from "react-icons/rx";
-import userprofileimage from "../Components/Assets/users/userprofile_1.png";
+import userprofileimage from "../Components/Assets/users/profile_image.png";
 import Loader from "./CommonComponents/Loader";
 
 // import { FaPlus } from 'react-icons/fa';  // Font Awesome icon
@@ -361,7 +361,7 @@ const UserPage = () => {
       {isLoading && <Loader />}
       <div className="Usercontainer">
         <ToastContainer />
-        <div className="d-flex p-3 rounded profilesec">
+        <div className="d-flex p-3 pb-2 rounded profilesec">
           <div className="me-3 imageSec">
             {userprofileimage ? (
               <img
@@ -381,13 +381,13 @@ const UserPage = () => {
                 <h5 className="user_username">
                   {getUserProfile.user[0].username}
                 </h5>
-                <p className="user_usertype">
+                <p className="user_usertype mb-2">
                   {getUserProfile.user[0].usertype}
                 </p>
                 <p className="user_useraddress">
                   {getUserProfile.user[0].useraddress}
                 </p>
-                <Button variant="primary" size="sm">
+                <Button variant="primary">
                   Edit Profile
                 </Button>
               </div>
@@ -407,13 +407,13 @@ const UserPage = () => {
               </Nav.Item>
             </Nav>
 
-            <Tab.Content className="bg-white border p-3">
+            <Tab.Content className="bg-white border p-3 pt-2">
               <Tab.Pane eventKey="zones">
                 <div className="UserTable_TopSection" ref={tableWrapperRef}>
                   {/* <h1>All Users</h1> */}
                   <div className="UserTable_Section">
                     <div className="searchandBtSection">
-                      <div className="searchbarsec">
+                      <div className="searchbarsec flex-grow-1">
                         <SearchBar
                           placeholder="Search Zones..."
                           onSearch={setQuery}
@@ -452,7 +452,7 @@ const UserPage = () => {
                         />
                       </div>
                       <div className="buttonsSections">
-                        <div className="p-4">
+                        <div className="p-4 pt-1">
                           <Buttons
                             text="View"
                             type="button"

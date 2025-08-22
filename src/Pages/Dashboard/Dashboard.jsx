@@ -4,9 +4,9 @@
 // import LiveOccupancyChart2 from "./OccupancyChart2";
 // import CustomCard from "../CommonComponents/Card";
 // import axios from "axios";
-// import { Tab, Nav } from "react-bootstrap";
+// import { Tab, Nav, Spinner } from "react-bootstrap";
 // import DashFilters from "./CascadeMultiSelect";
-// import { showSuccess, showError, showInfo } from "../CommonComponents/Toaster";
+// import { showSuccess } from "../CommonComponents/Toaster";
 // import NoData from "../CommonComponents/NoDataAvailable";
 
 // const DashboardPage = () => {
@@ -19,7 +19,9 @@
 //   const [selectedCitiesData, setselectedCitiesData] = useState([]);
 //   const [selectedZonesData, setselectedZonesData] = useState([]);
 //   const [zones, setZones] = useState([]);
-//   const [loading, setLoading] = useState(true);
+
+//   const [pageLoading, setPageLoading] = useState(true); // ✅ only for first load
+
 //   const [appliedFilters, setAppliedFilters] = useState({
 //     countries: [],
 //     cities: [],
@@ -33,92 +35,57 @@
 //   const hasFetchedRef = useRef(false);
 //   const tableWrapperRef = useRef(null);
 
-//   const fetchDashData = async () => {
-//     try {
-//       const payload = {
-//         selectedZones: ["HighZone", "LowZone"],
-//       };
-//       const res = await axios.post(
-//         `${API_URL}/dashboard/dashboard1/generateDashboardData`,
-//         payload,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
-//       );
-//       // console.log(res.data?.data);
-//       // setDashboardData(res.data?.data)
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-//   ///-----------------------------------------------------------------------------------------------------------------------------///
+//   const handleZones = async (isFirstLoad = false) => {
+//     if (isFirstLoad) setPageLoading(true);
 
-//   const handleZones = async () => {
-//     // setLoading(true);
 //     try {
-//       let payload = {
-//         vid: vid,
-//         username: username,
-//         country: "",
-//         city: "",
-//         zone: "",
-//       };
+//       let payload = { vid, username, country: "", city: "", zone: "" };
 //       const response = await axios.post(
 //         `${API_URL}/dashboard/dashboard1filter/getSelectedZones`,
 //         payload,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
+//         { headers: { Authorization: `Bearer ${token}` } }
 //       );
-//       const zoneData = response.data?.data; // assume [{id:1,name:"Zone1"}, {id:2,name:"Zone2"}]
+
+//       const zoneData = response.data?.data;
 //       setZones(zoneData);
+
 //       const zoneNames = zoneData ? zoneData.selectedZones : "";
-//       let dashpayload = {
-//         selectedZones: zoneNames,
-//       };
+//       let dashpayload = { selectedZones: zoneNames };
+
 //       const sendRes = await axios.post(
 //         `${API_URL}/dashboard/dashboard1/generateDashboardData`,
 //         dashpayload,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
+//         { headers: { Authorization: `Bearer ${token}` } }
 //       );
-//       setDashboardData(sendRes.data?.data);
 
-//       // console.log("Zones sent successfully:", sendRes.data?.data);
-//       // }
+//       setDashboardData(sendRes.data?.data || []);
 //     } catch (error) {
 //       console.error("Error in handleZones:", error);
+//       setDashboardData([]);
 //     } finally {
-//       setLoading(false);
+//       if (isFirstLoad) setPageLoading(false);
 //     }
 //   };
 
-//   // Call once on mount + every 5s
+//   // First load + auto refresh silently
 //   useEffect(() => {
-//     handleZones();
+//     handleZones(true); // ✅ loader only here
+
 //     const interval = setInterval(() => {
-//       handleZones();
+//       handleZones(false); // ✅ silent refresh, no loader
 //     }, 5000);
+
 //     return () => clearInterval(interval);
 //   }, []);
+
 //   const filters = async () => {
 //     try {
-//       let payload = {
-//         vid: vid,
-//         username: username,
-//         country: "",
-//         city: "",
-//         zone: "",
-//       };
+//       let payload = { vid, username, country: "", city: "", zone: "" };
 //       const res = await axios.post(
 //         `${API_URL}/dashboard/dashboard1filter/filters`,
 //         payload,
-//         {
-//           headers: { Authorization: `Bearer ${token}` },
-//         }
+//         { headers: { Authorization: `Bearer ${token}` } }
 //       );
-//       // console.log(res.data?.selectedFilters,res.data?.allFilters );
 //       setCountriesData(
 //         (res.data?.allFilters?.countries || []).map((c) => ({
 //           value: String(c.id),
@@ -163,36 +130,19 @@
 //       console.error("Error loading master data:", err);
 //     }
 //   };
-//   useEffect(() => {
-//     const handleClickOutside = (event) => {
-//       if (
-//         tableWrapperRef.current &&
-//         !tableWrapperRef.current.contains(event.target)
-//       ) {
-//         // setSelectedRowId(null);
-//       }
-//     };
-
-//     document.addEventListener("mousedown", handleClickOutside);
-//     return () => document.removeEventListener("mousedown", handleClickOutside);
-//   }, []);
 
 //   useEffect(() => {
 //     if (hasFetchedRef.current) return;
 //     hasFetchedRef.current = true;
-//     fetchDashData();
 //     filters();
 //   }, []);
 
 //   const handleApplyFilters = async (data) => {
-//     console.log("Filters from modal:", data);
 //     const payload = {
 //       vid,
 //       username,
 //       zone: data.zones?.map((o) => o.label).join(",") || "",
 //     };
-
-//     // console.log("Payload to API:", payload);
 
 //     try {
 //       let response = await axios.post(
@@ -200,12 +150,11 @@
 //         payload,
 //         { headers: { Authorization: `Bearer ${token}` } }
 //       );
-//       console.log("Filtered data:", response.data);
 //       if (response.data) {
 //         showSuccess(response.data.message);
 //       }
 
-//       await handleZones();
+//       await handleZones(true); // ✅ reload with loader
 //       await filters();
 //     } catch (err) {
 //       console.error("Error applying filters:", err);
@@ -213,6 +162,7 @@
 
 //     setShowFilters(false);
 //   };
+
 //   return (
 //     <div className="p-4">
 //       <DashHeader
@@ -221,7 +171,6 @@
 //           await filters();
 //           setShowFilters(true);
 //         }}
-//         // onFilterClick={() => setShowFilters(true)}
 //       />
 
 //       {/* Cascade Filter Modal */}
@@ -259,17 +208,13 @@
 //                   <div style={{ maxHeight: "650px" }}>
 //                     <div className="mt-4">
 //                       <CustomCard title="" size="md">
-//                         {loading ? (
-//                           // ✅ Spinner just inside the card (not full page)
-//                           <div className="flex justify-center items-center h-64">
-//                             <div
-//                               className="spinner-border text-primary"
-//                               role="status"
-//                             >
-//                               <span className="visually-hidden">
-//                                 Loading...
-//                               </span>
-//                             </div>
+//                         {pageLoading ? (
+//                           // ✅ loader only on first load / refresh
+//                           <div
+//                             className="d-flex justify-content-center align-items-center"
+//                             style={{ height: "250px" }}
+//                           >
+//                             <Spinner animation="border" variant="primary" />
 //                           </div>
 //                         ) : dashboardData && dashboardData.length > 0 ? (
 //                           <LiveOccupancyChart2 data={dashboardData} />
@@ -282,12 +227,6 @@
 //                 </div>
 //               </div>
 //             </Tab.Pane>
-
-//             <Tab.Pane eventKey="Dash2">
-//               <div className="UserTable_TopSection" ref={tableWrapperRef}>
-//                 <div className="UserTable_Section"></div>
-//               </div>
-//             </Tab.Pane>
 //           </Tab.Content>
 //         </Tab.Container>
 //       </div>
@@ -296,7 +235,6 @@
 // };
 
 // export default DashboardPage;
-
 import React, { useState, useEffect, useRef } from "react";
 import DashHeader from "../CommonComponents/Dashboard_Header";
 import "../../Components/Styles/LiveChart.css";
@@ -318,9 +256,7 @@ const DashboardPage = () => {
   const [selectedCitiesData, setselectedCitiesData] = useState([]);
   const [selectedZonesData, setselectedZonesData] = useState([]);
   const [zones, setZones] = useState([]);
-
   const [pageLoading, setPageLoading] = useState(true); // ✅ only for first load
-
   const [appliedFilters, setAppliedFilters] = useState({
     countries: [],
     cities: [],
@@ -332,7 +268,6 @@ const DashboardPage = () => {
   const username = sessionStorage.getItem("username");
   const API_URL = import.meta.env.VITE_API_URL;
   const hasFetchedRef = useRef(false);
-  const tableWrapperRef = useRef(null);
 
   const handleZones = async (isFirstLoad = false) => {
     if (isFirstLoad) setPageLoading(true);
@@ -368,10 +303,10 @@ const DashboardPage = () => {
 
   // First load + auto refresh silently
   useEffect(() => {
-    handleZones(true); // ✅ loader only here
+    handleZones(true); 
 
     const interval = setInterval(() => {
-      handleZones(false); // ✅ silent refresh, no loader
+      handleZones(false); 
     }, 5000);
 
     return () => clearInterval(interval);
@@ -453,7 +388,7 @@ const DashboardPage = () => {
         showSuccess(response.data.message);
       }
 
-      await handleZones(true); // ✅ reload with loader
+      await handleZones(true);
       await filters();
     } catch (err) {
       console.error("Error applying filters:", err);
@@ -502,22 +437,35 @@ const DashboardPage = () => {
 
           <Tab.Content className="bg-white border p-3">
             <Tab.Pane eventKey="Dash1">
-              <div className="UserTable_TopSection" ref={tableWrapperRef}>
+              <div className="UserTable_TopSection">
                 <div className="UserTable_Section">
                   <div style={{ maxHeight: "650px" }}>
                     <div className="mt-4">
                       <CustomCard title="" size="md">
                         {pageLoading ? (
-                          // ✅ loader only on first load / refresh
+                          // Loader only on first page load
                           <div
-                            className="d-flex justify-content-center align-items-center"
-                            style={{ height: "250px" }}
+                            style={{
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                              height: "250px",
+                              background: "rgba(250,250,250,0.7)",
+                              borderRadius: "12px",
+                            }}
                           >
-                            <Spinner animation="border" variant="primary" />
+                            <Spinner
+                              animation="border"
+                              variant="primary"
+                              style={{ width: "2rem", height: "2rem" }}
+                            />
+                            <p className="mt-3 text-muted">Loading chart...</p>
                           </div>
                         ) : dashboardData && dashboardData.length > 0 ? (
                           <LiveOccupancyChart2 data={dashboardData} />
                         ) : (
+                          // ✅ Only show NoData when pageLoading is false AND data is empty
                           <NoData />
                         )}
                       </CustomCard>

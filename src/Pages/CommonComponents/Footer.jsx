@@ -1,6 +1,7 @@
 // src/Pages/CommonComponents/Footer.jsx
 import React, { useEffect, useState } from 'react';
 import "../../Components/Styles/Footer.css";
+import footerlogo from "../../Components/Assets/footer-logo.png";
 
 const Footer = () => {
       const [timeString, setTimeString] = useState('');
@@ -26,7 +27,8 @@ const Footer = () => {
     <>
     <footer className="footer bg-light text-muted  d-flex justify-content-between align-items-center">
        <div className="footer-time">{timeString}</div>
-       <div className="footer-copy">Copyright © 2025 All Rights Reserved</div>
+       <div className="footer-copy">Copyright © 2025 All Rights Reserved 
+        <img src={footerlogo} alt="footerlogo" className="footer_logo" width={132} height={40} /></div>
      </footer>
 </>
   );

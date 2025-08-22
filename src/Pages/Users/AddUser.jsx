@@ -282,10 +282,10 @@ const UserFormModal = ({
                 </Row>
               </Modal.Body>
               <Modal.Footer className="d-flex justify-content-center">
-                <Button variant="secondary" onClick={handleClose}>
+                <Button variant="primary btn-sm" onClick={handleClose}>
                   Cancel
                 </Button>
-                <Button variant="primary" type="submit">
+                <Button variant="primary btn-sm actv" type="submit">
                   {editingUser ? "Update" : "Save"}
                 </Button>
               </Modal.Footer>

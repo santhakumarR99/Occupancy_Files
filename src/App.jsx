@@ -43,7 +43,7 @@ function App() {
                     path="/liveOccupancy"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin","Operator","Viewer"]}
                       >
                         {/* <HelloworldC /> */}
                         <DashboardPage />
@@ -55,7 +55,7 @@ function App() {
                     path="/historicalAnalytics"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin","Operator","Viewer"]}
                       >
                         <UnderDevelopment />
                       </ProtectedRoute>
@@ -65,7 +65,7 @@ function App() {
                     path="/predictions"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin","Operator","Viewer"]}
                       >
                         <UnderDevelopment />
                       </ProtectedRoute>
@@ -76,7 +76,7 @@ function App() {
                     path="/users"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin","Operator","Viewer"]}
                       >
                         {/* <GetAllUsersList /> */}
                         <UserPage />
@@ -88,7 +88,7 @@ function App() {
                     path="/zones"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin"]}
                       >
                         <GetAllZoneList />
                         {/* <UnderDevelopment /> */}
@@ -99,7 +99,7 @@ function App() {
                     path="/threshold"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin"]}
                       >
                         <ThresholdsPage />
                       </ProtectedRoute>
@@ -110,7 +110,7 @@ function App() {
                     path="/sms"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin"]}
                       >
                         {/* <UnderDevelopment /> */}
                         <SMSTab/>
@@ -121,7 +121,7 @@ function App() {
                     path="/email"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin"]}
                       >
                         {/* <UnderDevelopment /> */}
                         <EmailTab />
@@ -132,7 +132,7 @@ function App() {
                     path="/logs"
                     element={
                       <ProtectedRoute
-                        allowedRoles={["admin", "user", "Operator"]}
+                        allowedRoles={["Admin","Operator","Viewer"]}
                       >
                         {/* <UnderDevelopment /> */}
                         <LogReportPage/>

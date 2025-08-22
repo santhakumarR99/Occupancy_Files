@@ -104,11 +104,11 @@ fieldset {
 /* Close btn */
 .modal-close-btn {
   border: none;
-  background: #f3f4f6;
+  background: #ffffff;
   padding: 6px 10px;
   border-radius: 8px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1;
 }
 .modal-close-btn:hover {
@@ -139,4 +139,9 @@ fieldset {
 }
 .chart-fade.loaded {
   opacity: 1;
+}
+p.OccupiedZoneLabel_color {
+    margin: 0;
+    color: #9496A1;
+    font-size: 14px;
 }
