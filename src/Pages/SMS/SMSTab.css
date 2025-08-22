@@ -154,7 +154,7 @@
 }
 
 .sms-edit-btn, .sms-delete-btn, .sms-add-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
   padding: 8px 16px;
@@ -164,20 +164,24 @@
   color: #374151;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  /* only color/background/border transition, no size/position changes */
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.sms-edit-btn:disabled, .sms-delete-btn:disabled {
+/* Disabled state: visual dim only, no hover/active interactions */
+.sms-edit-btn:disabled, .sms-delete-btn:disabled, .sms-add-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  pointer-events: none;
 }
 
-.sms-edit-btn:hover:not(:disabled) {
+/* Hover and active (clicked) states change only color/background/border */
+.sms-edit-btn:hover:not(:disabled), .sms-edit-btn:active:not(:disabled) {
   background: #f3f4f6;
   border-color: #9ca3af;
 }
 
-.sms-delete-btn:hover:not(:disabled) {
+.sms-delete-btn:hover:not(:disabled), .sms-delete-btn:active:not(:disabled) {
   background: #fef2f2;
   border-color: #fca5a5;
   color: #dc2626;
@@ -189,8 +193,9 @@
   border-color: #2563eb;
 }
 
-.sms-add-btn:hover {
+.sms-add-btn:hover:not(:disabled), .sms-add-btn:active:not(:disabled) {
   background: #1d4ed8;
+  border-color: #1e40af;
 }
 
 .sms-search-container {

@@ -9,7 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     // Restore user from localStorage
-    const name = sessionStorage.getItem("name");
+    const name = sessionStorage.getItem("username");
     const role = sessionStorage.getItem("role");
     // URL = import.meta.env.VITE_API_URL;
     if (name && role) {
@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 
  
   const login = (name, role) => {
-    const names = sessionStorage.getItem("name");
+    const names = sessionStorage.getItem("username");
     const roles = sessionStorage.getItem("role");
     setUser({ name: names, role: roles });
     console.log(user);

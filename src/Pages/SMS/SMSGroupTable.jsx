@@ -162,7 +162,7 @@ const SMSGroupTable = () => {
       setShowAddModal(false);
     await fetchGrid();
   setSuccess(`Group "${groupData?.groupName ?? ""}" added`);
-   toast.success("Group Name Added Successfully", {
+   toast.success("Group Added Successfully", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -174,7 +174,9 @@ const SMSGroupTable = () => {
         });
     } catch (err) {
       console.error("Failed to create SMS group:", err);
-      setError(err?.message || "Failed to create group");
+      const msg = err?.message || "Failed to create group";
+      setError(msg);
+      toast.error(msg, { position: "top-center" });
     } finally {
       setLoading(false);
     }
@@ -188,7 +190,7 @@ const SMSGroupTable = () => {
     await fetchGrid();
     const nameForMsg = updatedData?.groupname || updatedData?.groupName || updatedData?.name || "";
   setSuccess(`Group "${nameForMsg}" updated`);
-   toast.success("Group Name Updated Successfully", {
+   toast.success("Group Updated Successfully", {
           position: "top-center",
           autoClose: 3000,
           hideProgressBar: false,
@@ -199,7 +201,9 @@ const SMSGroupTable = () => {
           theme: "light",
         });
     } catch (e) {
-      // fetchGrid already sets error; keep minimal here
+      // fetchGrid already sets error; also surface a toast
+      const msg = e?.message || "Failed to update group";
+      toast.error(msg, { position: "top-center" });
     } finally {
       setLoading(false);
       setShowEditModal(false);
@@ -296,7 +300,9 @@ const SMSGroupTable = () => {
         });
     } catch (err) {
       console.error("Failed to delete SMS group:", err);
-      setError(err?.message || "Failed to delete group");
+      const msg = err?.message || "Failed to delete group";
+      setError(msg);
+      toast.error(msg, { position: "top-center" });
     } finally {
       setLoading(false);
       setShowDeleteModal(false);
@@ -319,14 +325,7 @@ const SMSGroupTable = () => {
     <ToastContainer />
     <div className="group-table-container">
       {loading && <div style={{ marginBottom: 8 }}>Loading...</div>}
-      {error && (
-        <div style={{ marginBottom: 8, color: "#b00020" }}>{error}</div>
-      )}
-      {success && (
-        <div role="status" aria-live="polite" style={{ marginBottom: 8, color: "#0f9d58" }}>
-          {success}
-        </div>
-      )}
+  {/* Hide inline API responses; using toasts instead */}
       <div className="group-table-header">
         <input
           className="search-input"

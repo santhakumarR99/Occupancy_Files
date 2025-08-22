@@ -20,7 +20,7 @@ import LogReportPage from "./Pages/Logs/LogReportPage";
 import SMSTab from "./Pages/SMS/SMSTab";
 import EmailTab from "./Pages/Email/EmailTab";
 import { ToasterContainer } from "./Pages/CommonComponents/Toaster";
-// import ThresholdsPage from "./Pages/Threshold/pages/ThresholdsPage";
+import ThresholdsPage from "./Pages/Threshold/pages/ThresholdsPage";
 function App() {
   return (
     <div className="Mainapp">
@@ -101,7 +101,7 @@ function App() {
                       <ProtectedRoute
                         allowedRoles={["admin", "user", "Operator"]}
                       >
-                     {/* <ThresholdsPage /> */}
+                        <ThresholdsPage />
                       </ProtectedRoute>
                     }
                   />
@@ -109,16 +109,20 @@ function App() {
                   <Route
                     path="/sms"
                     element={
-                      <ProtectedRoute allowedRoles={["admin", "user", "Operator"]}>
+                      <ProtectedRoute
+                        allowedRoles={["admin", "user", "Operator"]}
+                      >
                         {/* <UnderDevelopment /> */}
-                     <SMSTab/>
+                        <SMSTab/>
                       </ProtectedRoute>
                     }
                   />
                   <Route
                     path="/email"
                     element={
-                      <ProtectedRoute allowedRoles={["admin", "user", "Operator"]}>
+                      <ProtectedRoute
+                        allowedRoles={["admin", "user", "Operator"]}
+                      >
                         {/* <UnderDevelopment /> */}
                         <EmailTab />
                       </ProtectedRoute>
@@ -127,7 +131,9 @@ function App() {
                   <Route
                     path="/logs"
                     element={
-                      <ProtectedRoute allowedRoles={["admin","user","Operator"]}>
+                      <ProtectedRoute
+                        allowedRoles={["admin", "user", "Operator"]}
+                      >
                         {/* <UnderDevelopment /> */}
                         <LogReportPage/>
                       </ProtectedRoute>

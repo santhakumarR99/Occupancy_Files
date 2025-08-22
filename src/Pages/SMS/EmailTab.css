@@ -7,7 +7,7 @@
 }
 
 .email-id-field input[type="email"] {
-  flex: 1;
+  .cancel-btn, .save-btn {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -18,28 +18,37 @@
 .email-id-field input[type="email"]:focus {
   border: 1.5px solid #1976d2;
   outline: none;
-}
+  /* Button styles aligned to the screenshot: outline blue Cancel, solid blue Save */
+  .cancel-btn {
+    background: #ffffff;
+    color: #2162CD;
+    border: 1.5px solid #2162CD;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+  }
 
-.email-buttons {
-  display: flex;
-  flex-direction: row;
-  gap: 4px;
-}
-.email-add, .email-remove {
-  width: 32px;
-  height: 32px;
+  .cancel-btn:hover {
+    background: #E9EFFA;
+    border-color: #2162CD;
+  }
+
+  .cancel-btn:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(33, 98, 205, 0.2);
+  }
   border: none;
   background: #f0f0f0;
-  color: #1976d2;
+    background: #2162CD;
   font-size: 20px;
+    border: 1px solid transparent;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.02);
   border-radius: 50%;
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
-  display: flex;
+    background: #1E55B3;
   align-items: center;
   justify-content: center;
 }
-.email-add:disabled, .email-remove:disabled {
+    background: #9bb8ec;
   color: #bbb;
   cursor: not-allowed;
   background: #f7f7f7;
@@ -620,6 +629,39 @@
   gap: 16px;
   justify-content: center;
   margin-top: 32px;
+}
+
+/* --- Scoped overrides to ensure correct button colors within SMS form --- */
+.sms_email-form .save-btn {
+  background: #2162CD !important;
+  color: #fff !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+}
+
+.sms_email-form .save-btn:hover {
+  background: #1E55B3 !important;
+}
+
+.sms_email-form .save-btn:disabled {
+  background: #9bb8ec !important;
+}
+
+.sms_email-form .cancel-btn {
+  background: #ffffff !important;
+  color: #2162CD !important;
+  border: 1.5px solid #2162CD !important;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.02);
+}
+
+.sms_email-form .cancel-btn:hover {
+  background: #E9EFFA !important;
+}
+
+.sms_email-form .cancel-btn:focus-visible,
+.sms_email-form .save-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(33, 98, 205, 0.2);
 }
 
 .cancel-btn, .save-btn {

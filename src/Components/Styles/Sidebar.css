@@ -129,10 +129,10 @@
 button:focus {
   outline: none;
 }
-.main-content {
+/* .main-content {
   flex: 1;
   overflow-y: auto;
-}
+} */
 /* Submenu padding and underline */
 a.menu-item {
     padding: 12px;

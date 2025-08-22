@@ -22,98 +22,102 @@ const LoginPage = () => {
   // const apiUrl = process.env.REACT_APP_API_URL;
   const API_URL = import.meta.env.VITE_API_URL;
   // console.log("API Base URL:", API_URL);
-  const VerifyUser = async (e) => {
-    e.preventDefault();
-    for (let key in values) {
-      if (!values[key]) {
-        ValidateFields(key, values[key]);
-      }
-      // console.log(errors);
-    }
-    for (let key in errors) {
-      if (errors[key]) {
-        return;
-      }
-    }
-    try {
-      let vals = values;
-      const valuesObj = {
-        ...vals,
-      };
-      let role = "admin";
-      let name = "santhakumar";
+const VerifyUser = async (e) => {
+  e.preventDefault();
+
+  // reset API error before each attempt
+  setError((prev) => ({ ...prev, CatchError: "" }));
+
+  // validate fields
+  let validationErrors = {};
+  if (!values.username) {
+    validationErrors.NameError = "User Name is required";
+  }
+  if (!values.password) {
+    validationErrors.PassError = "Password is required";
+  }
+
+  // if validation fails → stop
+  if (Object.keys(validationErrors).length > 0) {
+    setError((prev) => ({ ...prev, ...validationErrors }));
+    return;
+  }
+
+  try {
+    const Result = await axios.post(`${API_URL}/auth/login`, values);
+ console.log(Result)
+    if (Result?.data?.success) {
+      let user = Result.data.user.username;
+      let vid = Result.data.user.vid;
+      let role = Result.data.user.role || "";
+      let token = Result?.data?.token?.token;
+
+      sessionStorage.setItem("token", token);
       sessionStorage.setItem("role", role);
-      sessionStorage.setItem("name", name);
-      // login(name, role);
-      // navigate("/liveOccupancy", { replace: true });
-      console.log(valuesObj);
-      const Result = await axios.post(`${API_URL}/auth/login`, valuesObj);
+      sessionStorage.setItem("username", user);
+      sessionStorage.setItem("vid", vid);
 
-      console.log(Result);
-      if (Result && Result.data.success == true) {
-        // localStorage.setItem("token", token);
-        // localStorage.setItem( "user", JSON.stringify({ ...Result.data.user, password: "" }));
-        let user = Result.data.user.username;
-        let vid = Result.data.user.vid;
-        let role = Result.data ? Result.data.user.role : "";
-        let token = Result?.data?.token.token;
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("role", role);
-        sessionStorage.setItem("username", user);
-        sessionStorage.setItem("vid", vid);
-        login(user, role);
-        navigate("/liveOccupancy", { replace: true });
-        setValues({ name: "", password: "" });
-      } else if (Result && Result.data.success == false) {
-        errors.CatchError = Result.data ? Result.data.message : "";
-        setError({ ...errors });
-      }
-    } catch (error) {
-      console.log(error);
-      errors.CatchError = error.response ? error.response.data.message : "";
-      setError({ ...errors });
+      login(user, role);
+      navigate("/liveOccupancy", { replace: true });
+
+      // reset form + errors
+      setValues({ username: "", password: "" });
+      setError({ NameError: "", PassError: "", CatchError: "" });
+    } else {
+      setError((prev) => ({
+        ...prev,
+        CatchError: Result.data?.message || "Invalid credentials",
+      }));
     }
-  };
+  } catch (error) {
+    setError((prev) => ({
+      ...prev,
+      CatchError: error.response?.data?.message || "Something went wrong",
+    }));
+  }
+};
 
-  const onChangeHandler = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    let inputvalues = values;
-    // console.log(inputvalues);
-    ValidateFields(name, value);
-    inputvalues[name] = value;
-    setValues({ ...inputvalues });
-  };
-  const ValidateFields = (name, value) => {
-    const error = errors;
-    switch (name) {
-      case "username":
-        if (!value) {
-          error.NameError = "Name field is required";
-          error.CatchError = "";
-        } else {
-          error.NameError = "";
-        }
-        break;
-      case "password":
-        if (!value) {
-          error.PassError = "Password field is required";
-          error.CatchError = "";
-          // validForm.passwordValid = false;
-        } else {
-          error.PassError = "";
-          // validForm.passwordValid = true;
-        }
-        break;
+const onChangeHandler = (e) => {
+  const { name, value } = e.target;
 
-      default:
-        break;
-    }
+  setValues((prev) => ({ ...prev, [name]: value }));
+  setError((prev) => ({
+    ...prev,
+    [`${name === "username" ? "NameError" : "PassError"}`]: "",
+    CatchError: "",
+  }));
+};
 
-    // toCheckErrorsAndValid(validForm);
-    setError({ ...error });
-    // console.log(error, "errors");
-  };
+  // const ValidateFields = (name, value) => {
+  //   const error = errors;
+  //   switch (name) {
+  //     case "username":
+  //       if (!value) {
+  //         error.NameError = "Name field is required";
+  //         error.CatchError = "";
+  //       } else {
+  //         error.NameError = "";
+  //       }
+  //       break;
+  //     case "password":
+  //       if (!value) {
+  //         error.PassError = "Password field is required";
+  //         error.CatchError = "";
+  //         // validForm.passwordValid = false;
+  //       } else {
+  //         error.PassError = "";
+  //         // validForm.passwordValid = true;
+  //       }
+  //       break;
+
+  //     default:
+  //       break;
+  //   }
+
+  //   // toCheckErrorsAndValid(validForm);
+  //   setError({ ...error });
+  //   // console.log(error, "errors");
+  // };
   return (
     <div>
       <div className="Login_BgPage">

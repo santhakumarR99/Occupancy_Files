@@ -1,163 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import Select, { components } from "react-select";
 import "./EmailTab.css";
-import "../../Components/Styles/Multiselectdropdown.css";
+import MultiSelectDropdown from "../CommonComponents/MultiSelectDropDown";
 
 const API_BASE = import.meta.env.VITE_API_URL || "http://delbi2dev.deloptanalytics.com:3000";
 const emailRegex = /^\S+@\S+\.\S+$/;
 
-// React-select based MultiSelectDropdown matching SMS Add Group UI
-const MultiSelectDropdown = ({ options, selectedValues, onChange, placeholder = "Select" }) => {
-  const selectOptions = (options || []).map((opt) =>
-    typeof opt === "string"
-      ? { value: opt, label: opt }
-      : { value: opt.value ?? opt.label, label: opt.label ?? opt.value }
-  );
-  const selected = selectOptions.filter((opt) => (selectedValues || []).includes(opt.value));
-  const wrapperRef = React.useRef(null);
-  const [menuWidth, setMenuWidth] = useState(0);
-
-  useEffect(() => {
-    const updateWidth = () => {
-      if (wrapperRef.current) {
-        const rect = wrapperRef.current.getBoundingClientRect();
-        setMenuWidth(rect.width);
-      }
-    };
-    updateWidth();
-    window.addEventListener("resize", updateWidth);
-    return () => window.removeEventListener("resize", updateWidth);
-  }, []);
-
-  const Option = (props) => (
-    <components.Option {...props}>
-      <label className="dropdown-item" style={{ display: "flex", alignItems: "center" }}>
-        <input type="checkbox" checked={props.isSelected} onChange={() => {}} style={{ marginRight: 10 }} />
-        {props.label}
-      </label>
-    </components.Option>
-  );
-
-  const MultiValue = () => null;
-
-  const ValueContainer = (props) => {
-    const count = props.getValue().length;
-    const text = count > 0 ? `${count} Selected` : props.selectProps.placeholder || "Select";
-    return (
-      <components.ValueContainer {...props}>
-        <div style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{text}</div>
-        {Array.isArray(props.children) ? props.children[1] : null}
-      </components.ValueContainer>
-    );
-  };
-
-  const DropdownIndicator = (props) => {
-    const isOpen = props.selectProps.menuIsOpen;
-    return (
-      <components.DropdownIndicator {...props}>
-        <span className={`arrow ${isOpen ? "up" : "down"}`} />
-      </components.DropdownIndicator>
-    );
-  };
-
-  const IndicatorSeparator = () => null;
-
-  const MenuList = (props) => (
-    <>
-      <div
-        className="dropdown-item"
-        style={{ fontWeight: 600, color: "#7b809a", borderBottom: "1px solid #eee" }}
-        onClick={() => props.selectProps.onChange([])}
-      >
-        Clear Selected Items
-      </div>
-      <components.MenuList {...props} />
-    </>
-  );
-
-  return (
-    <div className="custom-dropdown" ref={wrapperRef} style={{ width: "100%" }}>
-      <Select
-        isMulti
-        options={selectOptions}
-        value={selected}
-        onChange={(selectedList) => {
-          if (!Array.isArray(selectedList)) {
-            onChange([]);
-          } else {
-            const vals = selectedList
-              .filter((opt) => opt && typeof opt.value !== "undefined")
-              .map((opt) => String(opt.value));
-            onChange(vals);
-          }
-        }}
-        placeholder={placeholder}
-        classNamePrefix="react-select"
-        closeMenuOnSelect={false}
-        hideSelectedOptions={false}
-        menuPortalTarget={typeof document !== "undefined" ? document.body : null}
-        menuPosition="fixed"
-        menuPlacement="auto"
-        menuShouldScrollIntoView={false}
-        maxMenuHeight={240}
-        components={{ Option, MenuList, MultiValue, ValueContainer, DropdownIndicator, IndicatorSeparator }}
-        styles={{
-          container: (provided) => ({
-            ...provided,
-            width: "100%",
-            fontFamily: "sans-serif",
-          }),
-          control: (provided, state) => ({
-            ...provided,
-            padding: "6px 8px",
-            borderRadius: 8,
-            background: "#fff",
-            boxShadow: "0px 2px 6px rgba(0,0,0,0.1)",
-            border: state.isFocused ? "1px solid #cbd5e1" : "1px solid transparent",
-            cursor: "pointer",
-            minHeight: 40,
-          }),
-          indicatorsContainer: (provided) => ({ ...provided, paddingRight: 8 }),
-          placeholder: (provided) => ({ ...provided, marginLeft: 0 }),
-          valueContainer: (provided) => ({
-            ...provided,
-            paddingLeft: 8,
-          }),
-          menu: (provided) => ({
-            ...provided,
-            zIndex: 9999,
-            borderRadius: 8,
-            boxShadow: "0px 4px 12px rgba(0,0,0,0.1)",
-            marginTop: 6,
-            overflow: "hidden",
-            width: menuWidth || provided.width,
-            minWidth: menuWidth || provided.minWidth,
-          }),
-          menuPortal: (base) => ({ ...base, zIndex: 9999 }),
-          menuList: (provided) => ({
-            ...provided,
-            paddingTop: 8,
-            paddingBottom: 8,
-          }),
-          option: (provided, state) => ({
-            ...provided,
-            padding: 0,
-            background: state.isFocused ? "#f3f4f6" : "#fff",
-            color: "#111827",
-          }),
-        }}
-      />
-    </div>
-  );
-};
+// Using shared MultiSelectDropdown from CommonComponents
 
 const AddEmailGroupModal = ({ show, onClose, onSave }) => {
   const [groupName, setGroupName] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [emails, setEmails] = useState([]);
   const [threshold, setThreshold] = useState("");
-  const [zones, setZones] = useState([]);
+  const [zones, setZones] = useState([]); // array of {label, value}
   const [selectedEmailIndex, setSelectedEmailIndex] = useState(null);
   const [thresholdOptions, setThresholdOptions] = useState([]);
   const [zoneOptions, setZoneOptions] = useState([]);
@@ -197,7 +53,8 @@ const AddEmailGroupModal = ({ show, onClose, onSave }) => {
           ? data.zone.map((z) => z?.ZoneName).filter(Boolean)
           : [];
         setThresholdOptions(tOpts);
-        setZoneOptions(zOpts);
+        // normalize to {label, value}
+        setZoneOptions(zOpts.map((z) => ({ label: z, value: z })));
       } catch (err) {
         console.error("Failed to load threshold/zone options:", err);
         setOptionsError(err?.message || "Failed to load options");
@@ -252,7 +109,10 @@ const AddEmailGroupModal = ({ show, onClose, onSave }) => {
       username: username,
       groupname: groupName.trim(),
   email: Array.from(new Set(emails.map((e) => e.trim()))).filter(Boolean).join(";"),
-      zone: Array.isArray(zones) ? Array.from(new Set(zones.map((z) => z.trim()))).filter(Boolean).join(",") : "",
+      // build comma-separated string from selected objects
+      zone: Array.isArray(zones)
+        ? Array.from(new Set(zones.map((z) => (z?.value ?? "").toString().trim()))).filter(Boolean).join(",")
+        : "",
       threshold: String(threshold || "").trim(),
     };
     try {
@@ -381,7 +241,7 @@ const AddEmailGroupModal = ({ show, onClose, onSave }) => {
             <label>Zones <span className="required">*</span></label>
             <MultiSelectDropdown
               options={zoneOptions}
-              selectedValues={zones}
+              value={zones}
               onChange={setZones}
               placeholder={optionsLoading ? "Loading..." : "Select zones"}
             />

@@ -5,7 +5,7 @@ import UnauthorizedPage from "../Pages/UnauthorizedPage";
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
   const { user } = useAuth();
-  // console.log(user)
+  console.log(user)
   if (!user) return <Navigate to="/login" />;
   if (!allowedRoles.includes(user.role)) return <Navigate to="/login" />;
 //  if (!allowedRoles.includes(role)) return <Navigate to="/login" />; 
