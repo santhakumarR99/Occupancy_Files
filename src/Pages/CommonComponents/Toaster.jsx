@@ -17,5 +17,5 @@ export const showInfo = (msg) => {
 
 // toaster container (must render once in App.js)
 export const ToasterContainer = () => {
-  return <ToastContainer autoClose={3000} hideProgressBar={false} />;
+  return <ToastContainer autoClose={2000} hideProgressBar={false} />;
 };

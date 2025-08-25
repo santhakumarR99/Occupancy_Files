@@ -1,14 +1,14 @@
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import "../../Components/Styles/CascadeMultiSelect.css"; // paste CSS from step 2
+import "../../Components/Styles/CascadeMultiSelect.css";
 
 const MultiSelectDropdown = ({
-  options = [],        // [{ label, value }]
-  value = [],          // same shape as options
-  onChange,            // (newArray) => void
+  options = [],
+  value = [],
+  onChange,
   labelKey = "label",
   valueKey = "value",
-  placeholder = "Select Entrance",
+  placeholder = "",
   isInvalid = false,
   error = "",
 }) => {

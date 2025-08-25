@@ -54,7 +54,7 @@
 
 /* Sidebar Panel (Right block next to icons) */
 .sidebar-panel {
-  width: 228px;
+  width: 250px;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -123,6 +123,7 @@
   font-size: 0.875rem;
   color: #1f2937;
   padding-top: 1rem;
+  margin-bottom: 15px;
 }
 
 /* Remove focus outline on buttons */
@@ -137,4 +138,9 @@ button:focus {
 a.menu-item {
     padding: 12px;
     text-decoration: none;
+}
+.sidebar_username {
+    font-size: 16px;
+    font-weight: 600;
+    padding-top: 5px;
 }

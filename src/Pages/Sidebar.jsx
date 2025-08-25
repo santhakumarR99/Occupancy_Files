@@ -11,7 +11,9 @@ import "../Components/Styles/Sidebar.css";
 import "../Components/Styles/Mainpage.css";
 import Logout from "./Login/Logout";
 import logoutIcon from "../Components/Assets/Logout1.png"
-
+import Icon from "./CommonComponents/icon";
+import LogoutIcon1 from "../Components/Assets/logout.svg"
+import usernameicon from "../Components/Assets/username_Icon.svg"
 const Sidebar = () => {
   const [activeSection, setActiveSection] = useState("dashboard");
   const { user, logout } = useAuth();
@@ -76,7 +78,7 @@ const Sidebar = () => {
             onClick={() => setShowLogoutModal(true)}
             className="icon-btn logout"
           >
-            <FaPowerOff />
+        <Icon img={LogoutIcon1} Img_width="40px" Img_height="40px" />
           </button>
           <Logout
             show={showLogoutModal}
@@ -117,8 +119,9 @@ const Sidebar = () => {
         </div>
 
         <div className="user-info">
-          <FaUser />
-          <span>{username}</span>
+          {/* <FaUser /> */}
+            <Icon img={usernameicon} Img_width="40px" Img_height="40px" />
+          <span className="sidebar_username">{username}</span>
         </div>
       </div>
     </div>

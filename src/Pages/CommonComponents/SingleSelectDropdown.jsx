@@ -29,35 +29,69 @@ const SingleSelectDropdown = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  return (
-    <div
-      className={`custom-dropdown ${isInvalid ? "invalid" : ""}`}
-      ref={dropdownRef}
-    >
-      {/* Dropdown header */}
-      <div className="dropdown-header" onClick={() => setIsOpen(!isOpen)}>
-        {value ? value.label : placeholder || "Select..."}
-        <span className={`arrow ${isOpen ? "up" : ""}`}></span>
-      </div>
+  // return (
+  //   <div
+  //     className={`custom-dropdown ${isInvalid ? "invalid" : ""}`}
+  //     ref={dropdownRef}
+  //   >
+  //     {/* Dropdown header */}
+  //     <div className="dropdown-header" onClick={() => setIsOpen(!isOpen)}>
+  //       {value ? value.label : placeholder || "Select..."}
+  //       <span className={`arrow ${isOpen ? "up" : ""}`}></span>
+  //     </div>
 
-      {/* Dropdown list */}
-      {isOpen && (
-        <div className="dropdown-list">
-          {options.map((option) => (
-            <div
-              key={option.value}
-              className={`dropdown-item ${
-                value && value.value === option.value ? "selected" : ""
-              }`}
-              onClick={() => handleSelect(option)}
-            >
-              {option.label}
-            </div>
-          ))}
-        </div>
-      )}
+  //     {/* Dropdown list */}
+  //     {isOpen && (
+  //       <div className="dropdown-list">
+  //         {options.map((option) => (
+  //           <div
+  //             key={option.value}
+  //             className={`dropdown-item ${
+  //               value && value.value === option.value ? "selected" : ""
+  //             }`}
+  //             onClick={() => handleSelect(option)}
+  //           >
+  //             {option.label}
+  //           </div>
+  //         ))}
+  //       </div>
+  //     )}
+  //   </div>
+  // );
+return (
+  <div
+    className={`custom-dropdown ${isInvalid ? "invalid" : ""} ${options.length <= 1 ? "disabled" : ""}`}
+    ref={dropdownRef}
+  >
+    {/* Dropdown header */}
+    <div
+      className="dropdown-header"
+      onClick={() => {
+        if (options.length > 1) setIsOpen(!isOpen);
+      }}
+    >
+      {value ? value.label : placeholder || "Select..."}
+      {options.length > 1 && <span className={`arrow ${isOpen ? "up" : ""}`}></span>}
     </div>
-  );
+
+    {/* Dropdown list */}
+    {isOpen && options.length > 1 && (
+      <div className="dropdown-list">
+        {options.map((option) => (
+          <div
+            key={option.value}
+            className={`dropdown-item ${
+              value && value.value === option.value ? "selected" : ""
+            }`}
+            onClick={() => handleSelect(option)}
+          >
+            {option.label}
+          </div>
+        ))}
+      </div>
+    )}
+  </div>
+);
 };
 
 SingleSelectDropdown.propTypes = {

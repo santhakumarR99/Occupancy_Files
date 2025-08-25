@@ -1,60 +1,58 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import MultiSelectDropdown from "../CommonComponents/MultiSelectDropDown";
 import SingleSelectDropdown from "../CommonComponents/SingleSelectDropdown";
-
-const UserFormModal = ({
+import "../../Components/Styles/UsersPage.css";
+const EditProfile = ({
   show,
   handleClose,
   onSave,
   editingUser,
-  Zones,
-  userdata,
+  selectedMainuser,
   isSaving,
 }) => {
+  const [profileData, setProfileData] = useState({});
+  const [allZones, setAllZones] = useState([]);
+  const [mappedZones, setAllMappedZones] = useState([]);
   const role = sessionStorage.getItem("role");
 
+  useEffect(() => {
+    if (
+      Array.isArray(selectedMainuser?.user) &&
+      selectedMainuser.user.length > 0
+    ) {
+      setProfileData(selectedMainuser.user[0]);
+      if (Array.isArray(selectedMainuser?.mappedZones)) {
+        setAllMappedZones(selectedMainuser.mappedZones);
+      }
+      if (Array.isArray(selectedMainuser?.allZones)) {
+        setAllZones(selectedMainuser.allZones);
+      }
+    }
+  }, [selectedMainuser]);
+  const AllZones = allZones.map((zone) => ({
+    label: zone.zonename,
+    value: zone.sl,
+  }));
+  console.log(selectedMainuser);
   const RequiredIcon = () => <span style={{ color: "red" }}> *</span>;
 
-  // Get user type options based on current role
-  const getUsertypeOptions = (role) => {
-    switch (role) {
-      case "Admin":
-        return [
-          { label: "Operator", value: "Operator" },
-          { label: "Viewer", value: "Viewer" },
-        ];
-      case "Operator":
-        return [{ label: "Viewer", value: "Viewer" }];
-      default:
-        return [];
-    }
-  };
-
-  const usertypeOptions = getUsertypeOptions(role);
-
-  const safeMappedZones = Array.isArray(userdata?.mappedZones)
-    ? userdata.mappedZones
-    : [];
-
   const getInitialValues = () => ({
-    username: editingUser?.username || "",
-    useremailid: editingUser?.useremailid || "",
-    password: editingUser?.password || "",
-    confirmPassword: editingUser?.password || "",
-    usertype:
-      editingUser?.usertype ||
-      (usertypeOptions.length >= 1 ? usertypeOptions[0].value : ""),
+    username: profileData?.username || "",
+    useremailid: profileData?.useremailid || "",
+    password: profileData?.password || "",
+    confirmPassword: profileData?.password || "",
+    usertype: profileData?.usertype || "",
     selectedZones:
-      safeMappedZones.map((z) => ({
+      mappedZones.map((z) => ({
         label: z.zonename,
-        value: z.SL,
+        value: z.sl,
       })) || [],
-    useraddress: editingUser?.address || "",
-    receiveHealthMail: editingUser?.receiveHealthMail || false,
-    userblock: editingUser?.userblock || false,
+    useraddress: profileData?.address || "",
+    receiveHealthMail: profileData?.receiveHealthMail || false,
+    // userblock: profileData?.userblock || false,
   });
 
   const validationSchema = Yup.object().shape({
@@ -77,11 +75,6 @@ const UserFormModal = ({
     confirmPassword: Yup.string()
       .oneOf([Yup.ref("password")], "Passwords must match")
       .required("Confirm Password is required"),
-    usertype:
-      usertypeOptions.length > 0
-        ? Yup.string().required("User Type is required")
-        : Yup.string(),
-    selectedZones: Yup.array().min(1, "Select at least one zone"),
   });
 
   return (
@@ -108,7 +101,7 @@ const UserFormModal = ({
           <Form noValidate onSubmit={handleSubmit}>
             <Modal.Header closeButton>
               <Modal.Title>
-                {editingUser ? "Edit User" : "Add User"}
+                {profileData ? "Edit Profile" : "Add Profile"}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
@@ -123,7 +116,7 @@ const UserFormModal = ({
                     onChange={handleChange}
                     onBlur={handleBlur}
                     isInvalid={touched.username && !!errors.username}
-                    disabled={!!editingUser} 
+                    disabled={!!profileData}
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.username}
@@ -184,66 +177,22 @@ const UserFormModal = ({
               </Row>
 
               <Row>
-                {usertypeOptions.length > 0 && (
-                  <Form.Group as={Col} className="mb-3">
-                    <Form.Label>User Type</Form.Label>
-                    <SingleSelectDropdown
-                      options={usertypeOptions}
-                      value={
-                        usertypeOptions.find(
-                          (opt) => opt.value === values.usertype
-                        ) || null
-                      }
-                      onChange={(selected) =>
-                        setFieldValue("usertype", selected?.value || "")
-                      }
-                      isInvalid={touched.usertype && !!errors.usertype}
-                    />
-                    {touched.usertype && errors.usertype && (
-                      <div className="invalid-feedback d-block">
-                        {errors.usertype}
-                      </div>
-                    )}
-                  </Form.Group>
-                )}
-                <Form.Group as={Col} className="mb-3">
-                  <Form.Label>
-                    Zones <RequiredIcon />
-                  </Form.Label>
-                  <MultiSelectDropdown
-                    options={Zones}
-                    value={values.selectedZones}
-                    placeholder="Select Zones"
-                    onChange={(selected) =>
-                      setFieldValue("selectedZones", selected)
-                    }
+                <Form.Group className="mb-3">
+                  <Form.Label>Address</Form.Label>
+                  <Form.Control
+                    as="textarea"
+                    rows={2}
+                    name="useraddress"
+                    value={values.useraddress}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    isInvalid={touched.useraddress && !!errors.useraddress}
                   />
-                  {touched.selectedZones && errors.selectedZones && (
-                    <div className="invalid-feedback d-block">
-                      {errors.selectedZones}
-                    </div>
-                  )}
+                  <Form.Control.Feedback type="invalid">
+                    {errors.useraddress}
+                  </Form.Control.Feedback>
                 </Form.Group>
-              </Row>
-
-              <Form.Group className="mb-3">
-                <Form.Label>Address</Form.Label>
-                <Form.Control
-                  as="textarea"
-                  rows={2}
-                  name="useraddress"
-                  value={values.useraddress}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  isInvalid={touched.useraddress && !!errors.useraddress}
-                />
-                <Form.Control.Feedback type="invalid">
-                  {errors.useraddress}
-                </Form.Control.Feedback>
-              </Form.Group>
-
-              <Row>
-                <Form.Group as={Col} className="mb-3">
+                <Form.Group as={Col} className="mb-3 receivehealth">
                   <Form.Check
                     type="checkbox"
                     name="receiveHealthMail"
@@ -254,17 +203,6 @@ const UserFormModal = ({
                     }
                   />
                 </Form.Group>
-                {editingUser && (
-                  <Form.Group as={Col} className="mb-3">
-                    <Form.Check
-                      type="checkbox"
-                      name="userblock"
-                      label="User Block"
-                      checked={values.userblock}
-                      onChange={handleChange}
-                    />
-                  </Form.Group>
-                )}
               </Row>
             </Modal.Body>
             <Modal.Footer className="d-flex flex-column align-items-center">
@@ -282,9 +220,8 @@ const UserFormModal = ({
                   disabled={isSaving}
                 >
                   {isSaving ? (
-                    <> {editingUser ? "Updating..." :"Saving..."}
-                    </>
-                  ) : editingUser ? (
+                    <> {profileData ? "Updating..." : "Saving..."}</>
+                  ) : profileData ? (
                     "Update"
                   ) : (
                     "Save"
@@ -308,4 +245,4 @@ const UserFormModal = ({
   );
 };
 
-export default UserFormModal;
+export default EditProfile;

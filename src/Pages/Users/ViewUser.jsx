@@ -20,14 +20,15 @@ const ViewUser = ({ show, handleClose, user }) => {
     if (Array.isArray(user?.user) && user.user.length > 0) {
       setUserdata(user.user[0]);
     }
-    if (Array.isArray(user?.allZones)) {
-      setAllZones(user.allZones);
+    if (Array.isArray(user?.mappedZones)) {
+      setAllZones(user.mappedZones);
     }
   }, [user]);
+   console.log(user)
   const columns = [
     {
       name: "SL",
-      selector: (row) => row.sl,
+      selector: (row) => row.SL,
        width: "100px"
     },
     {
@@ -85,7 +86,7 @@ const customStyles = {
 };
 
   return (
-    <Modal show={show} onHide={handleClose} centered size="lg">
+    <Modal show={show} onHide={handleClose} centered backdrop="static" size="lg">
       <Modal.Header closeButton className="pb-1">
         <Modal.Title>View User</Modal.Title>
       </Modal.Header>

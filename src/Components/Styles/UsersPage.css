@@ -272,3 +272,6 @@ p.View_userdata {
     border-bottom: 0;;
     border-color: rgba(0, 0, 0, .12);
 }
+.mb-3.receivehealth.col {
+    margin-top: 8%;
+}
